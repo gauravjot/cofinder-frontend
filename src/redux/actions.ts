@@ -7,7 +7,7 @@ import {
 	MyScheduleTypeItem,
 	ReduxDetailedScheduleType,
 } from "types/stateTypes";
-import { AppDispatch } from "../index";
+import { AppDispatch } from "App";
 
 export const clearAllVariableStates = (dispatch: AppDispatch) => {
 	dispatch(clearDetailedSchedule());
