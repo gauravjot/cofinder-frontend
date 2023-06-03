@@ -46,6 +46,7 @@ export default function NewsFeed() {
 				setIsFetched(true);
 			})
 			.catch((error) => {
+				console.log(error);
 				setIsFetched(true);
 			});
 	}, []);

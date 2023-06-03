@@ -42,7 +42,7 @@ function encodeB64(rows: MyScheduleTypeItem[]) {
 /*
  *
  */
-export function useFetchSpecificSections(ignoreTerm?: false): ReduxDetailedScheduleType {
+export function useFetchSpecificSections(): ReduxDetailedScheduleType {
 	const [data, setData] = React.useState<ReduxDetailedScheduleType>({
 		fetched: 0,
 		sections: [],

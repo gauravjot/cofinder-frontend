@@ -151,11 +151,11 @@ export default function CourseFilter(props: Props) {
 
 	const [subjsOnChange, setSubjsOnChange] = React.useState<SubjectType[]>([]);
 	const [profsOnChange, setProfsOnChange] = React.useState<InstructorType[]>([]);
-	function onSubjectChange(selectedList: any[], selectedItem: {}) {
+	function onSubjectChange(selectedList: any[]) {
 		setSubjsOnChange(selectedList);
 	}
 
-	function onProfessorChange(selectedList: any[], selectedItem: {}) {
+	function onProfessorChange(selectedList: any[]) {
 		setProfsOnChange(selectedList);
 	}
 

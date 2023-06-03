@@ -25,9 +25,9 @@ export default function Sidebar(props: Props) {
 			setExpand(false);
 		}
 	}
-	function isMobile(): boolean {
-		return window.innerWidth <= 1280;
-	}
+	// function isMobile(): boolean {
+	// 	return window.innerWidth <= 1280;
+	// }
 	toExpand();
 
 	window.addEventListener("resize", () => {

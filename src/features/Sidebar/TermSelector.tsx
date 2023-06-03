@@ -56,6 +56,7 @@ export default function TermSelector() {
 					}
 				})
 				.catch(function (error) {
+					console.log(error);
 					setIsFetching(false);
 				});
 		}
