@@ -61,13 +61,7 @@ a,
 }
 a:hover,
 .tw-a-button:hover {
-	@apply dark:text-accent-100 text-accent-800;
-}
-
-a:hover::after,
-.tw-a-button:hover::after {
-	content: "";
-	@apply w-full absolute bottom-0 h-px bg-accent-600 left-0;
+	@apply dark:text-accent-100 text-accent-800 underline underline-offset-4;
 }
 
 .font-sans {
@@ -483,8 +477,8 @@ nav[aria-label="Main"] a[aria-current="page"] {
 	@apply block text-[0.875rem] leading-4;
 }
 
-.tw-hover-no-underline::after {
-	@apply !bg-transparent !h-0;
+.tw-hover-no-underline:hover {
+	@apply no-underline;
 }
 
 .tw-tooltip-parent {

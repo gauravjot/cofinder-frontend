@@ -1,7 +1,7 @@
 import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
 /* CSS */
-import "./assets/css/common.css";
-import "./assets/css/global.css";
+import "@/assets/css/common.css";
+import "@/assets/css/global.css";
 /* Redux */
 import { compose } from "redux";
 import { configureStore } from "@reduxjs/toolkit";
@@ -14,14 +14,16 @@ import {
 	currentTermReducer,
 	myScheduleReducer,
 	detailedScheduleReducer,
-} from "./redux/reducers";
+} from "@/redux/reducers";
 /* Pages */
-import Home from "./pages/home";
-import About from "./pages/about";
-import Courses from "./pages/courses";
-import Calendar from "./pages/calendar";
-import { sectionsReducer } from "./redux/reducers";
+import Home from "@/pages/home";
+import About from "@/pages/about";
+import Courses from "@/pages/courses";
+import Calendar from "@/pages/calendar";
+import { sectionsReducer } from "@/redux/reducers";
 import { ROUTE } from "@/routes";
+import StartSessionPage from "@/pages/auth/sut/session";
+import { userReducer } from "@/redux/user_reducers";
 
 /*
  * LocalStorage and Redux
@@ -80,6 +82,7 @@ const store = configureStore({
 		currentTerm: currentTermReducer,
 		mySchedule: myScheduleReducer,
 		sections: sectionsReducer,
+		user: userReducer,
 	},
 	enhancers: composeEnhancers,
 	preloadedState: persistedState,
@@ -104,6 +107,10 @@ export default function App() {
 					<Route
 						path={ROUTE.CourseBrowserKeywordFilter()}
 						element={<Courses />}
+					/>
+					<Route
+						path={ROUTE.DiscordAuthHandling}
+						element={<StartSessionPage />}
 					/>
 				</Routes>
 			</Router>
