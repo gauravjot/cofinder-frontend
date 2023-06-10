@@ -1,7 +1,7 @@
 import * as React from "react";
 import logo from "@/assets/images/branding.png";
 import github from "@/assets/svg/github.svg";
-import { GITHUB_URL, REPO_URL } from "@/config";
+import { GITHUB_URL } from "@/config";
 import { Link } from "react-router-dom";
 import TermSelector from "./TermSelector";
 import ErrorBoundary from "@/components/utils/ErrorBoundary";

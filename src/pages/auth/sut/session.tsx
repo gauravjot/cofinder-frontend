@@ -13,6 +13,7 @@ export default function StartSessionPage() {
 	//TODO: Start a session and redirect to homepage with updated state
 	React.useEffect(() => {
 		setTimeout(() => {
+			console.log(token);
 			navigate(ROUTE.Home);
 		}, 2000);
 	});
