@@ -1,5 +1,6 @@
 import { Reducer, AnyAction } from "redux";
 import { LOGOUT_USER, SET_USER } from "@/redux/user_actions";
+import { UserType } from "@/types/userTypes";
 
 /*
  * User reducer

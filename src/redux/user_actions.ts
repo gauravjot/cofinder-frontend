@@ -1,3 +1,5 @@
+import { UserType } from "@/types/userTypes";
+
 /*
  * User
  */
