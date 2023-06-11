@@ -10,7 +10,7 @@ export default function DiscordLogin({ isMobile = false }: { isMobile?: boolean 
 			className={
 				"mb-2 bg-discordblue/10 text-discordblue border-discordblue/50 border hover:scale-[1.02]" +
 				" dark:bg-discordblue dark:text-white flex rounded px-4 py-2.5" +
-				" text-sm font-medium uppercase leading-normal text-white shadow-md" +
+				" text-sm font-medium uppercase leading-normal shadow-md" +
 				" transition duration-150 ease-in-out hover:shadow-lg focus:shadow-lg" +
 				" focus:outline-none focus:ring-0 active:shadow-lg relative" +
 				(isMobile && " w-[80%] mx-auto place-content-center")
