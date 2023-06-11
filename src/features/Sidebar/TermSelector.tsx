@@ -107,7 +107,9 @@ export default function TermSelector() {
 
 	return (
 		<nav aria-label="Terms" className="relative px-4">
-			<div className="text-base pb-2 text-gray-600">Current Term</div>
+			<div className="text-base pb-2 text-gray-600 dark:text-slate-400">
+				Current Term
+			</div>
 			<button
 				type="button"
 				className={

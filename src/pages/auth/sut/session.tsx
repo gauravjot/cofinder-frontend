@@ -5,18 +5,21 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import React from "react";
 import { ROUTE } from "@/routes";
+import { useStartSession } from "@/services/auth/start_session";
 
 export default function StartSessionPage() {
 	const navigate = useNavigate();
-	let token = useParams().token;
+	let token = useParams().token || "";
+	let startSession = useStartSession(token);
 
-	//TODO: Start a session and redirect to homepage with updated state
 	React.useEffect(() => {
-		setTimeout(() => {
-			console.log(token);
-			navigate(ROUTE.Home);
-		}, 2000);
-	});
+		if (startSession.token.length > 0) {
+			const timer = setTimeout(() => {
+				navigate(ROUTE.Home);
+			}, 1250);
+			return () => clearTimeout(timer);
+		}
+	}, [startSession]);
 
 	themeApply();
 

@@ -6,14 +6,14 @@ import { UserType } from "@/types/userTypes";
 export const SET_USER = "SET_USER";
 export const LOGOUT_USER = "LOGOUT_USER";
 
-export const setSubjects = (list: UserType) => {
+export const setUser = (list: UserType) => {
 	return {
 		type: SET_USER,
 		payload: list,
 	};
 };
 
-export const clearSubjects = () => {
+export const logoutUser = () => {
 	return {
 		type: LOGOUT_USER,
 	};

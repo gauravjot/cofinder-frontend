@@ -9,7 +9,7 @@ import ThemeToggle from "@/components/utils/ThemeToggle";
 import { ROUTE } from "@/routes";
 import { FEEDBACK_URL } from "@/config";
 import UserDataIE from "./UserDataIE";
-import DiscordLogin from "../User/LoginButton/DiscordLogin";
+import { User } from "./User";
 
 interface Props {
 	current?: string;
@@ -94,7 +94,10 @@ export default function Sidebar(props: Props) {
 						<ThemeToggle />
 					</div>
 				</div>
-				<div className="xl:mt-14 mb-3 ">
+				<div className="xl:mt-14 mb-4">
+					<User />
+				</div>
+				<div className="my-3">
 					<ErrorBoundary fallback={<></>}>
 						<TermSelector />
 					</ErrorBoundary>
@@ -171,9 +174,6 @@ export default function Sidebar(props: Props) {
 					</Link>
 				</nav>
 				<nav aria-label="Sidebar-Secondary" className="flex-none xl:mb-8">
-					<div className="xl:hidden flex my-4 mt-6">
-						<DiscordLogin isMobile={true} />
-					</div>
 					<div className="flex mx-2">
 						<div className="flex-1 text-xs pr-3">
 							<div className="py-1">
