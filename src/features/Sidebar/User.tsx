@@ -15,9 +15,12 @@ export function User() {
 		</div>
 	) : (
 		<div className="w-full px-4 flex flex-col">
-			<div className="flex-1 font-medium pb-2 text-gray-600 dark:text-slate-400">
-				Get Started
+			<div className="flex-1 text-base font-medium pb-1 text-gray-800 dark:text-slate-200">
+				CoFinder Social
 			</div>
+			<p className="text-[0.925rem] mb-3 text-gray-600 dark:text-slate-400">
+				Save you course selections and talk with your classmates.
+			</p>
 			<DiscordLogin />
 		</div>
 	);
