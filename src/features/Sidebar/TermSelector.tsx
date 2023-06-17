@@ -7,7 +7,6 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { clearAllVariableStates } from "@/redux/actions";
 import { EP_TERMS } from "@/server_eps";
 import { useQuery } from "@tanstack/react-query";
-import Spinner from "@/components/ui/Spinner";
 import { FETCH_TIME_GAP } from "@/config";
 
 export default function TermSelector() {
