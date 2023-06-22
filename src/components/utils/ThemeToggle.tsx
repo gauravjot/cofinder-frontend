@@ -1,8 +1,7 @@
-import { useDocTheme } from "use-doc-theme";
+import useTheme from "@/utils/useTheme";
 
 export default function ThemeToggle() {
-	const theme = useDocTheme();
-
+	const theme = useTheme();
 	return (
 		<div className="darkmode-toggle" onClick={theme.toggle}>
 			<button>

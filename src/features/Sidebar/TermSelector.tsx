@@ -113,7 +113,7 @@ export default function TermSelector() {
 						Failed to reach server. Refresh the page or try again later.
 					</p>
 				</div>
-			) : query.isFetched ? (
+			) : query.isSuccess ? (
 				<>
 					<button
 						type="button"
