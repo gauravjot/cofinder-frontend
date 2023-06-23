@@ -1,6 +1,7 @@
 import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
 /* CSS */
 import "@/assets/css/common.css";
+import "@/assets/css/icons.css";
 import "@/assets/css/global.css";
 /* Redux */
 import { compose } from "redux";

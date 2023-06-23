@@ -9,18 +9,21 @@ import { APP_NAME } from "@/config";
 import { useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/App";
 import { FetchState } from "@/types/apiResponseType";
+import { MyScheduleTypeItem } from "@/types/stateTypes";
 
 const CourseFilter = React.lazy(() => import("@/features/CourseBrowser/CourseFilter"));
 const ListData = React.lazy(() => import("@/features/CourseBrowser/ListData"));
 const SelectionBar = React.lazy(() => import("@/features/CourseBrowser/SelectionBar"));
 
 export default function Courses() {
+	const mySchedule = useAppSelector((state: RootState) => state.mySchedule);
 	let params = useParams();
 	const [listData, setListData] = React.useState<SectionsBrowserType[]>([]);
 	const [isTrustedFilterActive, setIsTrustedFilterActive] =
 		React.useState<boolean>(false);
 	const [isKeywordFilterActive, setIsKeywordFilterActive] =
 		React.useState<boolean>(false);
+	const [showOnlySelected, setShowOnlySelected] = React.useState<boolean>(false);
 	const fetchState = useAppSelector((state: RootState) => state.sections).fetched;
 
 	React.useEffect(() => {
@@ -32,6 +35,13 @@ export default function Courses() {
 			setListData([]);
 		}
 	}, [fetchState, listData]);
+
+	React.useEffect(() => {
+		// If show selected is enabled but schedule is empty, disable it.
+		if (mySchedule.length === 0) {
+			setShowOnlySelected(false);
+		}
+	}, [mySchedule]);
 
 	return (
 		<div className="App">
@@ -59,10 +69,12 @@ export default function Courses() {
 									setIsKFA={setIsKeywordFilterActive}
 									setSubjectFilter={params.subject}
 									setKeywordFilter={params.keyword}
+									showOnlySelected={showOnlySelected}
+									schedule={mySchedule}
 								/>
 								<div className="p-4 py-8 container mx-auto min-h-screen">
-									<div className="flex flex-wrap relative">
-										<div className="pt-3 flex-1 mb-4">
+									<div className="flex flex-wrap relative place-items-center mb-4">
+										<div className="flex-1">
 											<h3 className="font-medium font-serif dark:text-white">
 												Course Browser
 											</h3>
@@ -86,17 +98,42 @@ export default function Courses() {
 												)}
 											</div>
 										</div>
-										<div className="mt-3">
-											{fetchState > 0 ? <SelectionBar /> : <></>}
+										<div>
+											{fetchState > 0 ? (
+												<div className="flex place-items-center gap-4">
+													<div className="hidden md:block">
+														<ShowSelectedToggle
+															mySchedule={mySchedule}
+															setShowOnlySelected={
+																setShowOnlySelected
+															}
+															showOnlySelected={
+																showOnlySelected
+															}
+														/>
+													</div>
+													<SelectionBar
+														mySchedule={mySchedule}
+													/>
+												</div>
+											) : (
+												<></>
+											)}
 										</div>
-										<div className="basis-full h-0"></div>
-										<div className="w-full">
-											<ListData
-												listData={listData}
-												isTFA={isTrustedFilterActive}
-												isKFA={isKeywordFilterActive}
-											/>
-										</div>
+									</div>
+									<div className="block md:hidden mb-6">
+										<ShowSelectedToggle
+											mySchedule={mySchedule}
+											setShowOnlySelected={setShowOnlySelected}
+											showOnlySelected={showOnlySelected}
+										/>
+									</div>
+									<div className="w-full">
+										<ListData
+											listData={listData}
+											isTFA={isTrustedFilterActive}
+											isKFA={isKeywordFilterActive}
+										/>
 									</div>
 								</div>
 							</React.Suspense>
@@ -105,5 +142,37 @@ export default function Courses() {
 				</div>
 			</div>
 		</div>
+	);
+}
+
+function ShowSelectedToggle({
+	mySchedule,
+	setShowOnlySelected,
+	showOnlySelected,
+}: {
+	mySchedule: MyScheduleTypeItem[];
+	setShowOnlySelected: React.Dispatch<React.SetStateAction<boolean>>;
+	showOnlySelected: boolean;
+}) {
+	const currentTerm = useAppSelector((state: RootState) => state.currentTerm);
+	return (
+		<button
+			className="disabled:opacity-50 flex place-items-center py-1.5 px-3 bg-black/5 dark:bg-white/5 hover:bg-black/10 hover:dark:bg-white/10 rounded-full"
+			disabled={
+				mySchedule.filter((sch) => {
+					return sch.term === currentTerm.id;
+				}).length < 1
+			}
+			onClick={() => {
+				setShowOnlySelected(!showOnlySelected);
+			}}
+		>
+			{showOnlySelected ? (
+				<span className="ic dark:invert ic-check-box-ticked"></span>
+			) : (
+				<span className="ic dark:invert ic-check-box-empty"></span>
+			)}
+			<span className="pt-px pl-2.5">Show Selected Courses</span>
+		</button>
 	);
 }

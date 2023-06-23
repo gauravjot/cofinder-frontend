@@ -1,17 +1,19 @@
 import * as React from "react";
 import { setDetailedSchedule } from "@/redux/actions";
-import { RootState } from "@/App";
 import { getColor } from "@/features/Home/MyCourses";
 import { SectionsBrowserType } from "@/types/dbTypes";
 import { changeMySchedule } from "@/redux/actions";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useAppDispatch } from "@/redux/hooks";
 import { refactorTime } from "@/utils/RefactorDateTime";
-import { ReduxDetailedScheduleType } from "@/types/stateTypes";
+import { MyScheduleTypeItem, ReduxDetailedScheduleType } from "@/types/stateTypes";
 import { useFetchSpecificSections } from "@/services/core/fetch_specific_sections";
 import { INACTIVE_SECTION_MSG } from "@/strings";
 
-export default function SelectionBar() {
-	const mySchedule = useAppSelector((state: RootState) => state.mySchedule);
+export default function SelectionBar({
+	mySchedule,
+}: {
+	mySchedule: MyScheduleTypeItem[];
+}) {
 	const schedule: ReduxDetailedScheduleType = useFetchSpecificSections();
 	const dispatch = useAppDispatch();
 	// For expanding filter
@@ -102,7 +104,7 @@ export default function SelectionBar() {
 
 	return (
 		<>
-			{schedule?.sections?.length > 0 ? (
+			{mySchedule.length > 0 && schedule?.sections?.length > 0 ? (
 				<button
 					onClick={() => {
 						toggleFilters();

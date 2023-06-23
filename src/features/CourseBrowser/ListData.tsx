@@ -40,8 +40,8 @@ export default function ListData(props: Props) {
 	};
 
 	const removeFromSchedule = (section: SectionsBrowserType) => {
-		dispatch(removeFromMySchedule([{ section: section.crn, term: currentTerm.id }]));
 		dispatch(removeFromDetailedSchedule(section.crn));
+		dispatch(removeFromMySchedule([{ section: section.crn, term: currentTerm.id }]));
 	};
 
 	return (

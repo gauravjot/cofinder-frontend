@@ -1,12 +1,12 @@
 import * as React from "react";
 import Multiselect from "multiselect-react-dropdown";
 import { useLocation } from "react-router-dom";
-import { SectionsBrowserType, InstructorType } from "@/types/dbTypes";
-import { SubjectType } from "@/types/dbTypes";
+import { SectionsBrowserType, InstructorType, SubjectType } from "@/types/dbTypes";
 import {
 	ReduxSectionDetailedType,
 	ReduxInstructorType,
 	ReduxSubjectType,
+	MyScheduleTypeItem,
 } from "@/types/stateTypes";
 import { useFetchSections } from "@/services/core/fetch_sections";
 import { useFetchInstructors } from "@/services/core/fetch_instructors";
@@ -18,6 +18,8 @@ interface Props {
 	setIsKFA: React.Dispatch<React.SetStateAction<boolean>>;
 	setSubjectFilter?: string;
 	setKeywordFilter?: string;
+	showOnlySelected: boolean;
+	schedule: MyScheduleTypeItem[];
 }
 
 export default function CourseFilter(props: Props) {
@@ -68,12 +70,25 @@ export default function CourseFilter(props: Props) {
 		}
 	}, [props.setKeywordFilter]);
 
-	const setData = props.setData;
-
 	React.useEffect(() => {
 		// Apply Filters
 		if (sectionsTermData && sectionsTermData.fetched > 0) {
+			// List of crns in schedule
+			let schedule_crns: number[] = [];
+			if (props.showOnlySelected) {
+				for (let sch = 0; sch < props.schedule.length; sch++) {
+					schedule_crns.push(props.schedule[sch].section);
+				}
+			}
 			let list = sectionsTermData.sections.filter((row) => {
+				if (schedule_crns.length > 0 && schedule_crns.includes(row.crn)) {
+					schedule_crns = schedule_crns.filter((s) => {
+						return s !== row.crn;
+					});
+					return true;
+				}
+				// If OnLy Selected Courses is ticked then we can ignore rest of the checks
+				if (props.showOnlySelected) return false;
 				let val = false;
 				let filtersActiveCount = 0;
 				// The keyword bar
@@ -138,7 +153,7 @@ export default function CourseFilter(props: Props) {
 			});
 			// Return list to parent
 			setIsKFA(deferredKeyword.length > 1);
-			setData(list);
+			props.setData(list);
 		}
 	}, [
 		deferredKeyword,
@@ -146,7 +161,8 @@ export default function CourseFilter(props: Props) {
 		selectedInstructors,
 		sectionsTermData,
 		setIsKFA,
-		setData,
+		props.setData,
+		props.showOnlySelected,
 	]);
 
 	const [subjsOnChange, setSubjsOnChange] = React.useState<SubjectType[]>([]);
