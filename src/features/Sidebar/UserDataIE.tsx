@@ -98,11 +98,11 @@ export default function UserDataIE() {
 			/>
 
 			<div
-				className="tw-screen-prompt right-0 top-0 z-20"
+				className="tw-screen-prompt inset-0 z-20 flex place-items-center place-content-center"
 				aria-selected={importPrompt ? "true" : "false"}
 			>
 				{importData?.schedule && importData.schedule.length > 0 ? (
-					<div className="max-w-[30rem] w-[80%] bg-white dark:bg-slate-700 rounded shadow-xl z-30 lg:right-[calc(50%-15rem)] right-4 top-24 fixed p-4">
+					<div className="max-w-[30rem] w-[80%] bg-white dark:bg-slate-700 rounded shadow-xl lg:right-[calc(50%-15rem)] p-4 -mt-20">
 						<h3 className="text-black dark:text-white font-medium mb-3">
 							<span className="material-icons text-2xl mr-2 align-middle">
 								help_outline
