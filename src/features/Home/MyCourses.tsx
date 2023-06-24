@@ -122,24 +122,27 @@ function SectionItem({
 						color.replace("#", "") +
 						" dark:tw-gradient-br-" +
 						color.replace("#", "") +
-						" z-0 h-24 w-24 px-4 pt-4 absolute"
+						" z-0 h-32 w-32 px-4 pt-4 absolute"
 					}
 				></div>
 			) : (
 				<></>
 			)}
-			<div className="relative z-10 px-4 py-4 h-full">
-				{!section.is_active && (
-					<div className="font-bold text-sm mb-4 uppercase py-0.5 mr-2 text-red-700 dark:text-red-200 bg-red-100 dark:bg-red-600/20 rounded inline-block px-2">
-						Cancelled
-					</div>
-				)}
+			<div className="relative z-10 h-full">
 				<div
 					className={
-						(!section.is_active ? "line-through" : "") +
-						" flex flex-col h-full"
+						(!section.is_active
+							? "line-through bg-red-100/30 dark:bg-red-500/10 "
+							: "") + " px-4 py-4 flex flex-col h-full"
 					}
 				>
+					{!section.is_active && (
+						<div>
+							<span className="font-bold text-sm mb-4 uppercase py-0.5 mr-2 text-red-700 dark:text-red-100 bg-red-100 dark:bg-red-600/20 rounded inline-block px-2">
+								Cancelled
+							</span>
+						</div>
+					)}
 					<div className="font-bold text-[1.125rem] dark:text-slate-100 leading-[1.125rem]">
 						{section.is_lab ? (
 							<span
@@ -191,9 +194,19 @@ function SectionItem({
 												style={{
 													width: `${
 														(query.data.seats.Actual * 100) /
-														(query.data.seats.Capacity > 0
-															? query.data.seats.Capacity
-															: 1)
+															(query.data.seats.Capacity > 0
+																? query.data.seats
+																		.Capacity
+																: 1) >
+														100
+															? 0
+															: (query.data.seats.Actual *
+																	100) /
+															  (query.data.seats.Capacity >
+															  0
+																	? query.data.seats
+																			.Capacity
+																	: 1)
 													}%`,
 												}}
 											></div>
@@ -221,9 +234,21 @@ function SectionItem({
 													width: `${
 														(query.data.waitlist.Actual *
 															100) /
-														(query.data.waitlist.Capacity > 0
-															? query.data.waitlist.Capacity
-															: 1)
+															(query.data.waitlist
+																.Capacity > 0
+																? query.data.waitlist
+																		.Capacity
+																: 1) >
+														100
+															? 0
+															: (query.data.waitlist
+																	.Actual *
+																	100) /
+															  (query.data.waitlist
+																	.Capacity > 0
+																	? query.data.waitlist
+																			.Capacity
+																	: 1)
 													}%`,
 												}}
 											></div>

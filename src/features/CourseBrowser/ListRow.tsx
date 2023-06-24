@@ -100,7 +100,6 @@ export function ListRow(props: Props) {
 		? ""
 		: " dark:text-white line-through opacity-50 ";
 	const rowItemClass =
-		(props.doesCollide && !props.isSelected ? "opacity-50" : "") +
 		" items-center text-smb leading-5 pr-4 lg:py-2" +
 		" text-gray-700 dark:text-white dark:text-opacity-80" +
 		inactiveSectionClass;
@@ -113,7 +112,7 @@ export function ListRow(props: Props) {
 						? "bg-accent-200 dark:bg-slate-1000"
 						: props.isSelected
 						? "bg-accent-200 dark:bg-accent-700"
-						: props.doesCollide || !props.section.is_active
+						: !props.section.is_active
 						? "bg-gray-100 dark:bg-slate-900"
 						: ""
 				}
@@ -142,7 +141,7 @@ export function ListRow(props: Props) {
 								(props.isSelected
 									? "bg-accent-300 dark:bg-accent-800"
 									: props.doesCollide && !props.isSelected
-									? "bg-red-600 bg-opacity-5"
+									? "bg-red-300 dark:bg-red-700/30 bg-opacity-30"
 									: "hover:bg-accent-300 text-gray-400 hover:text-gray-700 dark:hover:text-white dark:hover:bg-accent-700") +
 								" grid place-items-center px-4 tw-tooltip-parent"
 							}
@@ -191,9 +190,6 @@ export function ListRow(props: Props) {
 							>
 								<span
 									className={
-										(props.doesCollide && !props.isSelected
-											? "opacity-30"
-											: "") +
 										" material-icons text-xl text-black dark:text-white mt-0.5"
 									}
 								>
@@ -203,9 +199,6 @@ export function ListRow(props: Props) {
 						</div>
 						<div
 							className={
-								(props.doesCollide && !props.isSelected
-									? "opacity-30"
-									: "") +
 								" grid place-items-center ml-2 leading-5 lg:py-2 dark:text-white order-2 lg:order-3 flex-1 lg:flex-none"
 							}
 						>
