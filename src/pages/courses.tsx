@@ -10,10 +10,10 @@ import { useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/App";
 import { FetchState } from "@/types/apiResponseType";
 import { MyScheduleTypeItem } from "@/types/stateTypes";
+import ScrollToTopBtn from "@/components/ui/ScrollToTop";
 
 const CourseFilter = React.lazy(() => import("@/features/CourseBrowser/CourseFilter"));
 const ListData = React.lazy(() => import("@/features/CourseBrowser/ListData"));
-const SelectionBar = React.lazy(() => import("@/features/CourseBrowser/SelectionBar"));
 
 export default function Courses() {
 	const mySchedule = useAppSelector((state: RootState) => state.mySchedule);
@@ -45,6 +45,7 @@ export default function Courses() {
 
 	return (
 		<div className="App">
+			<ScrollToTopBtn />
 			<Helmet>
 				<title>Course Browser - {APP_NAME}</title>
 			</Helmet>
@@ -100,33 +101,21 @@ export default function Courses() {
 										</div>
 										<div>
 											{fetchState > 0 ? (
-												<div className="flex place-items-center gap-4">
-													<div className="hidden md:block">
-														<ShowSelectedToggle
-															mySchedule={mySchedule}
-															setShowOnlySelected={
-																setShowOnlySelected
-															}
-															showOnlySelected={
-																showOnlySelected
-															}
-														/>
-													</div>
-													<SelectionBar
+												<div className="flex place-items-center">
+													<ShowSelectedToggle
 														mySchedule={mySchedule}
+														setShowOnlySelected={
+															setShowOnlySelected
+														}
+														showOnlySelected={
+															showOnlySelected
+														}
 													/>
 												</div>
 											) : (
 												<></>
 											)}
 										</div>
-									</div>
-									<div className="block md:hidden mb-6">
-										<ShowSelectedToggle
-											mySchedule={mySchedule}
-											setShowOnlySelected={setShowOnlySelected}
-											showOnlySelected={showOnlySelected}
-										/>
 									</div>
 									<div className="w-full">
 										<ListData
@@ -157,7 +146,12 @@ function ShowSelectedToggle({
 	const currentTerm = useAppSelector((state: RootState) => state.currentTerm);
 	return (
 		<button
-			className="disabled:opacity-50 flex place-items-center py-1.5 px-3 bg-black/5 dark:bg-white/5 hover:bg-black/10 hover:dark:bg-white/10 rounded-full"
+			className={
+				(showOnlySelected
+					? "bg-laccent-800 hover:bg-laccent-900 text-white "
+					: "bg-gray-900/5 dark:bg-white/5 hover:bg-black/10 hover:dark:bg-gray-400/20 ") +
+				"disabled:opacity-50 flex place-items-center py-2 px-5 rounded-full"
+			}
 			disabled={
 				mySchedule.filter((sch) => {
 					return sch.term === currentTerm.id;
@@ -168,11 +162,11 @@ function ShowSelectedToggle({
 			}}
 		>
 			{showOnlySelected ? (
-				<span className="ic dark:invert ic-check-box-ticked"></span>
+				<span className="ic invert ic-check-box-ticked"></span>
 			) : (
 				<span className="ic dark:invert ic-check-box-empty"></span>
 			)}
-			<span className="pt-px pl-2.5">Show Selected Courses</span>
+			<span className="pt-px pl-2.5">Show Selected</span>
 		</button>
 	);
 }
