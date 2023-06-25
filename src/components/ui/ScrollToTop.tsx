@@ -30,7 +30,7 @@ export default function ScrollToTopBtn() {
 		<button
 			ref={mybutton}
 			type="button"
-			className="fixed flex place-items-center place-content-center z-20 bottom-0 lg:bottom-16 -right-16 bg-gray-300/60 dark:bg-slate-700/80 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-tl-md lg:rounded-l-lg w-12 h-12"
+			className="fixed flex place-items-center place-content-center z-20 bottom-0 lg:bottom-16 -right-16 bg-gray-300/80 dark:bg-slate-700/80 hover:bg-gray-400/60 dark:hover:bg-slate-600 rounded-tl-md lg:rounded-l-lg w-12 h-12"
 			id="btn-back-to-top"
 			title="Scroll to top"
 			onClick={() => {

@@ -144,6 +144,11 @@ function ShowSelectedToggle({
 	showOnlySelected: boolean;
 }) {
 	const currentTerm = useAppSelector((state: RootState) => state.currentTerm);
+
+	React.useEffect(() => {
+		setShowOnlySelected(false);
+	}, [currentTerm]);
+
 	return (
 		<button
 			className={

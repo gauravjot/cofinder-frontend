@@ -13,6 +13,7 @@ import {
 } from "@/redux/actions";
 import { FetchState } from "@/types/apiResponseType";
 import { API_FAIL_RETRY_TIMER } from "@/config";
+import { useFetchSpecificSections } from "@/services/core/fetch_specific_sections";
 const ListRow = React.lazy(() => import("@/features/CourseBrowser/ListRow"));
 
 interface Props {
@@ -23,7 +24,7 @@ interface Props {
 
 export default function ListData(props: Props) {
 	const dispatch = useAppDispatch();
-	const detailedSchedule = useAppSelector((state: RootState) => state.detailedSchedule);
+	const detailedSchedule = useFetchSpecificSections();
 	const currentTerm = useAppSelector((state: RootState) => state.currentTerm);
 	const fetchState = useAppSelector((state: RootState) => state.sections).fetched;
 
