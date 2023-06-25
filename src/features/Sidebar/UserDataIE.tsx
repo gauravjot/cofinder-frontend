@@ -1,14 +1,16 @@
 import * as React from "react";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
-import { RootState } from "@/App";
 import { TermType } from "@/types/dbTypes";
 import { MyScheduleTypeItem } from "@/types/stateTypes";
-import { changeMySchedule, setCurrentTerm } from "@/redux/actions";
+import { selectAllSchedules } from "@/redux/schedules/scheduleSlice";
+import { selectCurrentTerm } from "@/redux/terms/currentTermSlice";
+import { set as setMySchedule } from "@/redux/schedules/scheduleSlice";
+import { set as setCurrentTerm } from "@/redux/terms/currentTermSlice";
 
 export default function UserDataIE() {
 	const dispatch = useAppDispatch();
-	const mySchedule = useAppSelector((state: RootState) => state.mySchedule);
-	const currentTerm = useAppSelector((state: RootState) => state.currentTerm);
+	const mySchedule = useAppSelector(selectAllSchedules);
+	const currentTerm = useAppSelector(selectCurrentTerm);
 	const [importPrompt, setImportPrompt] = React.useState<boolean>(false);
 	const [importData, setImportData] = React.useState<ImportFormat>();
 	let importFileRef = React.useRef<HTMLInputElement>(null);
@@ -128,7 +130,7 @@ export default function UserDataIE() {
 							</button>
 							<button
 								onClick={() => {
-									dispatch(changeMySchedule(importData.schedule));
+									dispatch(setMySchedule(importData.schedule));
 									dispatch(setCurrentTerm(importData.currentTerm));
 									setImportPrompt(false);
 								}}

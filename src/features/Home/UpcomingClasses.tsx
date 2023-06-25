@@ -12,7 +12,7 @@ import { ROUTE } from "@/routes";
 import { FetchState } from "@/types/apiResponseType";
 import Spinner from "@/components/ui/Spinner";
 import { useAppSelector } from "@/redux/hooks";
-import { RootState } from "@/App";
+import { selectAllTermSchedules } from "@/redux/schedules/termScheduleSlice";
 
 interface UpcomingSection extends SectionsBrowserType {
 	time_start: Date;
@@ -36,7 +36,7 @@ export default function UpcomingClasses() {
 	const navigate = useNavigate();
 	const [sections, setSections] = React.useState<UpcomingSection[]>([]);
 	const [untilNextClass, setUntilNextClass] = React.useState<string>();
-	const schedule = useAppSelector((state: RootState) => state.detailedSchedule);
+	const schedule = useAppSelector(selectAllTermSchedules);
 
 	React.useEffect(() => {
 		let seventh_date = new Date();
