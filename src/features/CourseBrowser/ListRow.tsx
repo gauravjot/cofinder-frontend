@@ -96,6 +96,26 @@ export function ListRow(props: Props) {
 		S: "Saturday",
 	};
 
+	// Sort the days from Monday - Saturday
+	const order = ["M", "T", "W", "R", "F", "S"];
+	const daysSort = (a: string, b: string) => {
+		const indexA = order.indexOf(a);
+		const indexB = order.indexOf(b);
+
+		return indexA - indexB;
+	};
+	let daysOfWeekArray: string[] = [];
+	for (let i = 0; i < props.section.schedule.length; i++) {
+		if (daysOfWeekArray.length > 6) {
+			break;
+		}
+		let day = props.section.schedule[i].weekday;
+		if (day.length > 0 && order.includes(day) && !daysOfWeekArray.includes(day)) {
+			daysOfWeekArray.push(day);
+		}
+	}
+	daysOfWeekArray.sort(daysSort);
+
 	const inactiveSectionClass = props.section.is_active
 		? ""
 		: " dark:text-white line-through opacity-50 ";
@@ -278,34 +298,17 @@ export function ListRow(props: Props) {
 						{props.section.medium}
 					</div>
 					<div className={rowItemClass + " hidden lg:flex col-span-1"}>
-						{props.section.schedule
-							.slice()
-							.reverse()
-							.map((schedule, index) => {
-								return schedule.weekday.length > 0 &&
-									props.section.schedule
-										.slice()
-										.reverse()
-										.slice(0, index)
-										.map(({ weekday }) => weekday)
-										.indexOf(schedule.weekday) > -1 ? (
-									<></>
-								) : (
-									<span
-										key={index}
-										className={
-											schedule.weekday.length > 0 ? "mx-0.5" : ""
-										}
-										title={
-											Weekdays[
-												schedule.weekday as keyof typeof Weekdays
-											]
-										}
-									>
-										{schedule.weekday}
-									</span>
-								);
-							})}
+						{daysOfWeekArray.map((day, index) => {
+							return (
+								<span
+									key={index}
+									className="mx-0.5"
+									title={Weekdays[day as keyof typeof Weekdays]}
+								>
+									{day}
+								</span>
+							);
+						})}
 					</div>
 				</div>
 			</div>
