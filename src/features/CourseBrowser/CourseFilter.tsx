@@ -242,6 +242,7 @@ export default function CourseFilter(props: Props) {
 								toggleFilters();
 							}}
 							id="filter-btn"
+							disabled={sectionsTermData.fetched < 0}
 							className="shadow py-1 pl-4 pr-6 bg-laccent-800 text-white rounded-full"
 						>
 							<span className="material-icons text-xl align-middle">
@@ -271,11 +272,12 @@ export default function CourseFilter(props: Props) {
 								type="text"
 								className={
 									"font-medium tw-input-focus border rounded-lg border-gray-300 dark:bg-slate-700" +
-									" dark:border-slate-900 dark:text-white py-2 px-10 pl-12" +
+									" dark:border-slate-900 dark:text-white py-2 px-10 pl-12 disabled:opacity-50" +
 									" shadow w-[calc(100vw-3rem)] sm:w-[18rem] md:w-[20rem] lg:w-[24rem] xl:w-[26rem] 2xl:w-[28rem]"
 								}
 								placeholder="Search keyword e.g. CIS"
 								value={keyword}
+								disabled={sectionsTermData.fetched < 0}
 								onChange={(e) => setKeyword(e.target.value)}
 							/>
 							<div className="absolute left-1.5 top-[0.35rem] tw-show-on-hover-parent">
