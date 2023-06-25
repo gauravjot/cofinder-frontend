@@ -7,10 +7,10 @@ export const userSlice = createSlice({
 	name: "subjects",
 	initialState,
 	reducers: {
-		setUser: (state, action) => {
+		setUser: (_state, action) => {
 			return action.payload;
 		},
-		clearUser: (state) => {
+		clearUser: (_state) => {
 			return initialState;
 		},
 	},

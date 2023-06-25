@@ -5,26 +5,19 @@ import "@/assets/css/icons.css";
 import "@/assets/css/global.css";
 /* Redux */
 import { Provider } from "react-redux";
+import { reduxStore } from "./redux/store";
 /* Cookies */
 /* Pages */
+import { ROUTE } from "@/routes";
 import Home from "@/pages/home";
 import About from "@/pages/about";
 import Courses from "@/pages/courses";
 import Calendar from "@/pages/calendar";
-import { ROUTE } from "@/routes";
 import StartSessionPage from "@/pages/auth/sut/session";
-import { reduxStore } from "./redux/store";
-
-/*
- * Redux
- */
-// Infer the `RootState` and `AppDispatch` types from the store itself
-const store = reduxStore;
-export type AppDispatch = typeof store.dispatch;
 
 export default function App() {
 	return (
-		<Provider store={store}>
+		<Provider store={reduxStore}>
 			<Router>
 				<Routes>
 					<Route path={ROUTE.Home} element={<Home />} />

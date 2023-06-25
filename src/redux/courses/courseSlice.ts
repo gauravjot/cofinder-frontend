@@ -7,10 +7,10 @@ export const courseSlice = createSlice({
 	name: "courses",
 	initialState,
 	reducers: {
-		set: (state, action) => {
+		set: (_state, action) => {
 			return action.payload;
 		},
-		clear: (state) => {
+		clear: (_state) => {
 			return initialState;
 		},
 	},

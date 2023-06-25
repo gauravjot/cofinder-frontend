@@ -8,10 +8,10 @@ export const scheduleSlice = createSlice({
 	name: "mySchedule",
 	initialState,
 	reducers: {
-		set: (state, action) => {
+		set: (_state, action) => {
 			return action.payload;
 		},
-		clear: (state) => {
+		clear: (_state) => {
 			return initialState;
 		},
 		add: (state, action) => {

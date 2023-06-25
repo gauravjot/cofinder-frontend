@@ -5,10 +5,8 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { EP_TERMS } from "@/server_eps";
 import { useQuery } from "@tanstack/react-query";
 import { FETCH_TIME_GAP } from "@/config";
-import { selectAllTerms } from "@/redux/terms/termSlice";
-import { selectCurrentTerm } from "@/redux/terms/currentTermSlice";
-import { set as setTerms } from "@/redux/terms/termSlice";
-import { set as setCurrentTerm } from "@/redux/terms/currentTermSlice";
+import { selectAllTerms, set as setTerms } from "@/redux/terms/termSlice";
+import { selectCurrentTerm, set as setCurrentTerm } from "@/redux/terms/currentTermSlice";
 import { clear as clearTermSchedule } from "@/redux/schedules/termScheduleSlice";
 import { clear as clearSections } from "@/redux/sections/sectionSlice";
 import { clear as clearInstructors } from "@/redux/instructor/instructorSlice";
@@ -59,12 +57,13 @@ export default function TermSelector() {
 			})
 		);
 		if (currentTerm && currentTerm.id === "0") {
+			let term = query.data.terms[0];
 			dispatch(
 				setCurrentTerm({
-					id: query.data.terms[0].id,
-					name: query.data.terms[0].name,
-					date: query.data.terms[0].date,
-					term_ident: query.data.terms[0].term_ident || "",
+					id: term.id,
+					name: term.name,
+					date: term.date,
+					term_ident: term.term_ident || "",
 				})
 			);
 		}

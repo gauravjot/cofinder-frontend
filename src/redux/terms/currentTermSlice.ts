@@ -7,7 +7,7 @@ export const currentTermSlice = createSlice({
 	name: "currentTerm",
 	initialState,
 	reducers: {
-		set: (state, action) => {
+		set: (_state, action) => {
 			return action.payload;
 		},
 	},

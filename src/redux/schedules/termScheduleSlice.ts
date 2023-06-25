@@ -11,10 +11,10 @@ export const termScheduleSlice = createSlice({
 	name: "detailedSchedule",
 	initialState,
 	reducers: {
-		set: (state, action) => {
+		set: (_state, action) => {
 			return action.payload;
 		},
-		clear: (state) => {
+		clear: (_state) => {
 			return initialState;
 		},
 		add: (state, action) => {

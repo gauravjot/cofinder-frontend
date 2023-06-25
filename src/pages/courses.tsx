@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { APP_NAME } from "@/config";
 import { useAppSelector } from "@/redux/hooks";
-import { RootState } from "@/App";
+import { RootState } from "@/redux/store";
 import { FetchState } from "@/types/apiResponseType";
 import { MyScheduleTypeItem } from "@/types/stateTypes";
 import ScrollToTopBtn from "@/components/ui/ScrollToTop";
