@@ -10,9 +10,9 @@ import { useAppSelector } from "@/redux/hooks";
 import { RootState } from "@/redux/store";
 import { FetchState } from "@/types/apiResponseType";
 import { MyScheduleTypeItem } from "@/types/stateTypes";
-import ScrollToTopBtn from "@/components/ui/ScrollToTop";
+import ScrollToTopBtn from "@/components/utils/ScrollToTop";
 
-const CourseFilter = React.lazy(() => import("@/features/CourseBrowser/CourseFilter"));
+const Filter = React.lazy(() => import("@/features/CourseBrowser/Filter/Filter"));
 const ListData = React.lazy(() => import("@/features/CourseBrowser/ListData"));
 
 export default function Courses() {
@@ -64,7 +64,7 @@ export default function Courses() {
 									</div>
 								}
 							>
-								<CourseFilter
+								<Filter
 									setData={setListData}
 									setIsTFA={setIsTrustedFilterActive}
 									setIsKFA={setIsKeywordFilterActive}

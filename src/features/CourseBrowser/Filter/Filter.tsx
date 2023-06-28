@@ -1,5 +1,4 @@
 import * as React from "react";
-import Multiselect from "multiselect-react-dropdown";
 import { useLocation } from "react-router-dom";
 import { SectionsBrowserType, InstructorType, SubjectType } from "@/types/dbTypes";
 import {
@@ -11,6 +10,8 @@ import {
 import { useFetchSections } from "@/services/core/fetch_sections";
 import { useFetchInstructors } from "@/services/core/fetch_instructors";
 import { useFetchSubjects } from "@/services/core/fetch_subjects";
+import { filterData } from "./filter_fn";
+import { CourseBrowserFilter } from "@/components/ui/coursebrowser/CourseBrowserFilter";
 
 interface Props {
 	setData: React.Dispatch<React.SetStateAction<SectionsBrowserType[]>>;
@@ -22,7 +23,7 @@ interface Props {
 	schedule: MyScheduleTypeItem[];
 }
 
-export default function CourseFilter(props: Props) {
+export default function Filter(props: Props) {
 	const location = useLocation();
 	// For expanding filter
 	const [expandFilters, setExpandFilters] = React.useState<boolean>(false);
@@ -34,8 +35,6 @@ export default function CourseFilter(props: Props) {
 	const deferredKeyword = React.useDeferredValue(keyword);
 	// filter subjects and professors from expandable
 	// The contains choosen filters by user
-	let subjectsMultiSelectRef = React.useRef<Multiselect>(null);
-	let instructorsMultiSelectRef = React.useRef<Multiselect>(null);
 	const [selectedSubjects, setSelectedSubjects] = React.useState<SubjectType[]>([]);
 	const [selectedInstructors, setSelectedInstructors] = React.useState<
 		InstructorType[]
@@ -52,17 +51,16 @@ export default function CourseFilter(props: Props) {
 	const subjectsTermData: ReduxSubjectType = useFetchSubjects();
 
 	React.useEffect(() => {
-		if (subjectsTermData && subjectsTermData.fetched !== -1) {
-			for (let i = 0; i < subjectsTermData.subjects.length; i++) {
-				if (props.setSubjectFilter === subjectsTermData.subjects[i].id) {
-					setUrlSelectedSubject(subjectsTermData.subjects[i]);
-					setSelectedSubjects([subjectsTermData.subjects[i]]);
-					setActiveFilterCount(1);
-					setIsTFA(true);
-				}
+		for (let i = 0; i < subjectsTermData.subjects.length; i++) {
+			if (props.setSubjectFilter === subjectsTermData.subjects[i].id) {
+				setUrlSelectedSubject(subjectsTermData.subjects[i]);
+				setSelectedSubjects([subjectsTermData.subjects[i]]);
+				setActiveFilterCount(1);
+				setIsTFA(true);
+				break;
 			}
 		}
-	}, [subjectsTermData, props.setSubjectFilter, setIsTFA]);
+	}, [subjectsTermData.subjects, props.setSubjectFilter, setIsTFA]);
 
 	React.useEffect(() => {
 		if (props.setKeywordFilter) {
@@ -70,130 +68,70 @@ export default function CourseFilter(props: Props) {
 		}
 	}, [props.setKeywordFilter]);
 
+	// Apply Filters
 	React.useEffect(() => {
-		// Apply Filters
-		if (sectionsTermData && sectionsTermData.fetched > 0) {
-			// List of crns in schedule
-			let schedule_crns: number[] = [];
-			if (props.showOnlySelected) {
-				for (let sch = 0; sch < props.schedule.length; sch++) {
-					schedule_crns.push(props.schedule[sch].section);
-				}
-			}
-			let list = sectionsTermData.sections.filter((row) => {
-				if (schedule_crns.length > 0 && schedule_crns.includes(row.crn)) {
-					schedule_crns = schedule_crns.filter((s) => {
-						return s !== row.crn;
-					});
-					return true;
-				}
-				// If OnLy Selected Courses is ticked then we can ignore rest of the checks
-				if (props.showOnlySelected) return false;
-				let val = false;
-				let filtersActiveCount = 0;
-				// The keyword bar
-				if (deferredKeyword !== "" && deferredKeyword.length > 1) {
-					filtersActiveCount++;
-					deferredKeyword.split(",").every((keyword) => {
-						let l_keyword = keyword.toLowerCase().trim();
-						if (keyword !== "" && keyword.length > 1) {
-							val =
-								val ||
-								row.course.code.toLowerCase().includes(l_keyword) ||
-								row.course.name.toLowerCase().includes(l_keyword) ||
-								row.instructor.toLowerCase().includes(l_keyword) ||
-								row.subject_id.toLowerCase().includes(l_keyword) ||
-								row.subject.toLowerCase().includes(l_keyword) ||
-								row.crn.toString().includes(l_keyword) ||
-								(
-									row.subject_id.toLowerCase() +
-									" " +
-									row.course.code.toLowerCase()
-								).includes(l_keyword) ||
-								(
-									row.subject_id.toLowerCase() +
-									row.course.code.toLowerCase()
-								).includes(l_keyword) ||
-								(l_keyword === "lab" && row.is_lab) ||
-								row.medium.toLowerCase().includes(l_keyword);
-						}
-						// Break loop if val is already true
-						return !val;
-					});
-					if (val) return val; // return filter if val is true
-				}
-				// Subjects filter in Filter expandable
-				if (selectedSubjects.length > 0) {
-					selectedSubjects.every((subject: SubjectType) => {
-						filtersActiveCount++;
-						console.log(subject.name);
-						val =
-							val ||
-							row.subject.toLowerCase() === subject.name.toLowerCase();
-						// Break loop if val is already true
-						return !val;
-					});
-					if (val) return val; // return filter if val is true
-				}
-				// Professors filter in Filter expandable
-				if (selectedInstructors.length > 0) {
-					selectedInstructors.every((prof: InstructorType) => {
-						filtersActiveCount++;
-						val =
-							val ||
-							row.instructor
-								.toLowerCase()
-								.includes(prof.name.toLowerCase());
-						// Break loop if val is already true
-						return !val;
-					});
-				}
-				// If filters are active then we return val otherwise true
-				return filtersActiveCount > 0 ? val : true;
-			});
-			// Return list to parent
-			setIsKFA(deferredKeyword.length > 1);
-			props.setData(list);
-		}
+		applyFilters(
+			sectionsTermData.sections,
+			deferredKeyword,
+			props.showOnlySelected,
+			props.schedule
+		);
 	}, [
+		sectionsTermData.sections,
 		deferredKeyword,
-		selectedSubjects,
-		selectedInstructors,
-		sectionsTermData,
-		setIsKFA,
-		props.setData,
 		props.showOnlySelected,
+		props.schedule,
 	]);
 
-	const [subjsOnChange, setSubjsOnChange] = React.useState<SubjectType[]>([]);
-	const [profsOnChange, setProfsOnChange] = React.useState<InstructorType[]>([]);
-	function onSubjectChange(selectedList: any[]) {
-		setSubjsOnChange(selectedList);
-	}
-
-	function onProfessorChange(selectedList: any[]) {
-		setProfsOnChange(selectedList);
-	}
-
-	const applyFilters = () => {
-		if (subjsOnChange.length > 0) setSelectedSubjects([...subjsOnChange]);
-		if (profsOnChange.length > 0) setSelectedInstructors([...profsOnChange]);
-		if (subjsOnChange.length + profsOnChange.length === 0) {
-			removeFilters();
-		} else {
-			setActiveFilterCount(subjsOnChange.length + profsOnChange.length);
-			setIsTFA(subjsOnChange.length + profsOnChange.length > 0);
+	React.useEffect(() => {
+		if (selectedInstructors.length + selectedSubjects.length < 1) {
+			applyFilters(
+				sectionsTermData.sections,
+				deferredKeyword,
+				props.showOnlySelected,
+				props.schedule
+			);
 		}
-		toggleFilters();
-	};
+	}, [selectedSubjects, selectedInstructors]);
+
+	// Set isKeywordFilterActive
+	React.useEffect(() => {
+		setIsKFA(deferredKeyword.length > 0);
+	}, [deferredKeyword]);
+
+	const applyFilters = React.useCallback(
+		(
+			data: SectionsBrowserType[],
+			keyword: string,
+			showSelected: boolean,
+			schedule: MyScheduleTypeItem[]
+		) => {
+			let isAnyFilterActive =
+				keyword.length > 0 ||
+				selectedSubjects.length > 0 ||
+				selectedInstructors.length > 0 ||
+				showSelected;
+			// If no filter is active then we set state to whole data
+			props.setData(
+				isAnyFilterActive
+					? filterData(
+							data,
+							keyword,
+							selectedSubjects,
+							selectedInstructors,
+							showSelected ? schedule : []
+					  )
+					: data
+			);
+			setActiveFilterCount(selectedSubjects.length + selectedInstructors.length);
+			setIsTFA(selectedSubjects.length + selectedInstructors.length > 0);
+		},
+		[selectedSubjects, selectedInstructors]
+	);
 
 	const removeFilters = () => {
 		setSelectedSubjects([]);
 		setSelectedInstructors([]);
-		subjectsMultiSelectRef.current?.resetSelectedValues();
-		instructorsMultiSelectRef.current?.resetSelectedValues();
-		setActiveFilterCount(0);
-		setIsTFA(false);
 	};
 
 	/* Filter Toggle */
@@ -216,13 +154,6 @@ export default function CourseFilter(props: Props) {
 	};
 
 	const toggleEventHandler = React.useCallback((e: MouseEvent) => {
-		/* useCallback so function doesnt change in re-renders
-       otherwise our add/remove eventListeners will go haywire */
-		/* whitelisted with if-else loop:
-		   1. The menu box
-		   2. The button which is toggle
-		   3. Close-icon in Multiselect
-		   add more for exceptions */
 		if (
 			!document.getElementById("filter-box")?.contains(e.target as Node) &&
 			!document.getElementById("filter-btn")?.contains(e.target as Node) &&
@@ -343,30 +274,11 @@ export default function CourseFilter(props: Props) {
 									Subjects
 								</label>
 								<div className="tw-browse-course-filter w-72">
-									<Multiselect
-										ref={subjectsMultiSelectRef}
-										options={
-											subjectsTermData
-												? subjectsTermData.subjects
-												: []
-										} // Options to display in the dropdown
-										onSelect={onSubjectChange} // Function will trigger on select event
-										onRemove={onSubjectChange} // Function will trigger on select event
-										displayValue="name" // Property name to display in the dropdown options
-										placeholder="Type or choose..."
-										closeIcon="cancel"
-										selectedValues={
-											urlSelectedSubject
-												? [
-														{
-															id: urlSelectedSubject.id,
-															name: urlSelectedSubject.name,
-														},
-												  ]
-												: false
-										}
-										showCheckbox={true}
-										avoidHighlightFirstOption={true}
+									<CourseBrowserFilter
+										data={subjectsTermData.subjects}
+										preSelected={urlSelectedSubject}
+										selected={selectedSubjects}
+										setSelected={setSelectedSubjects}
 									/>
 								</div>
 							</div>
@@ -377,24 +289,13 @@ export default function CourseFilter(props: Props) {
 									className="text-gray-800 dark:text-slate-200 text-sm block px-4 pt-3 pb-2 leading-3"
 									htmlFor="subjects"
 								>
-									Professor
+									Instructor
 								</label>
 								<div className="tw-browse-course-filter w-72">
-									<Multiselect
-										ref={instructorsMultiSelectRef}
-										options={
-											instructorsTermData
-												? instructorsTermData.instructors
-												: []
-										} // Options to display in the dropdown
-										selectedValues={[]} // Preselected value to persist in dropdown
-										onSelect={onProfessorChange} // Function will trigger on select event
-										onRemove={onProfessorChange} // Function will trigger on select event
-										displayValue="name" // Property name to display in the dropdown options
-										placeholder="Type or choose..."
-										closeIcon="cancel"
-										showCheckbox={true}
-										avoidHighlightFirstOption={true}
+									<CourseBrowserFilter
+										data={instructorsTermData.instructors}
+										selected={selectedInstructors}
+										setSelected={setSelectedInstructors}
 									/>
 								</div>
 							</div>
@@ -402,7 +303,15 @@ export default function CourseFilter(props: Props) {
 					</div>
 					<div>
 						<button
-							onClick={() => applyFilters()}
+							onClick={() => {
+								applyFilters(
+									sectionsTermData.sections,
+									deferredKeyword,
+									props.showOnlySelected,
+									props.schedule
+								);
+								toggleFilters();
+							}}
 							className="tw-animation-scaleup-parent bg-accent-700 text-white text-left rounded-md px-3 py-1 font-medium mt-6 ml-1 tw-input-focus dark:hover:outline-transparent"
 							// disabled={
 							// 	subjsOnChange.length === 0 &&
