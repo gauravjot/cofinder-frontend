@@ -1,7 +1,7 @@
 import * as React from "react";
 import logo from "@/assets/images/branding.png";
 import github from "@/assets/svg/github.svg";
-import { GITHUB_URL, VERSION_CODE, VERSION_DATE } from "@/config";
+import { GITHUB_URL, VERSION_CODE, VERSION_DATE, VERSION_RELEASE_PAGE } from "@/config";
 import { Link } from "react-router-dom";
 import TermSelector from "./TermSelector";
 import ErrorBoundary from "@/components/utils/ErrorBoundary";
@@ -176,17 +176,16 @@ export default function Sidebar(props: Props) {
 				<nav aria-label="Sidebar-Secondary" className="flex-none xl:mb-8">
 					<div className="flex mx-2">
 						<div className="flex-1 text-sm pr-3">
-							Open source. Version Date: {VERSION_DATE}.{" "}
+							Open source. Release: {VERSION_DATE}.{" "}
 							<span className="xl:hidden">v{VERSION_CODE}.</span>
-							<br />
 							<a
-								href={GITHUB_URL}
+								href={VERSION_RELEASE_PAGE}
 								target="_blank"
 								rel="noreferrer"
 								aria-label="Link to repository"
-								className="text-sm"
+								className="text-sm block leading-7"
 							>
-								Check repository
+								Check changelog
 							</a>
 						</div>
 						<div className="mt-1 text-center flex-none place-content-center items-baseline flex">
