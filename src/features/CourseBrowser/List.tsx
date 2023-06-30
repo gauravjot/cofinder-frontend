@@ -18,6 +18,8 @@ import {
 } from "@/redux/schedules/termScheduleSlice";
 import { useFetchSchedule } from "@/services/core/fetch_schedule";
 import { MyScheduleTypeItem } from "@/types/stateTypes";
+import { Virtuoso } from "react-virtuoso";
+import { useLgMediaQuery } from "@/hooks/useMediaQuery";
 
 const ListRow = React.lazy(() => import("@/features/CourseBrowser/ListRow"));
 
@@ -35,6 +37,8 @@ export default function List(props: Props) {
 	const currentTerm = useAppSelector(selectCurrentTerm);
 	const fetchState = useAppSelector(selectAllSections).fetched;
 
+	const isLargeScreenSize = useLgMediaQuery();
+
 	const addToSchedule = (section: SectionsBrowserType) => {
 		dispatch(
 			addToMySchedule([
@@ -50,6 +54,28 @@ export default function List(props: Props) {
 	const removeFromSchedule = (section: SectionsBrowserType) => {
 		dispatch(removeFromTermSchedule(section.crn));
 		dispatch(removeFromMySchedule(section.crn));
+	};
+
+	const Row = ({ index }: { index: number }) => {
+		return (
+			<ListRow
+				key={props.listData[index].crn}
+				section={props.listData[index]}
+				term={currentTerm}
+				isSelected={
+					detailedSchedule?.sections.findIndex(
+						(o: SectionsBrowserType) => o.crn === props.listData[index].crn
+					) !== -1
+				}
+				doesCollide={
+					props.listData[index].is_active
+						? checkCollision(props.listData[index].schedule, detailedSchedule)
+						: false
+				}
+				addToSchedule={addToSchedule}
+				removeFromSchedule={removeFromSchedule}
+			/>
+		);
 	};
 
 	return (
@@ -78,7 +104,7 @@ export default function List(props: Props) {
 				</div>
 			) : props.listData ? (
 				<>
-					<div className="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-md py-2">
+					<div className="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 rounded-md py-2 h-full overflow-hidden">
 						<div className="hidden lg:grid grid-cols-12 tracking-wide font-medium dark:text-white pb-4 pt-3 border-b border-gray-300 dark:border-slate-700">
 							<div className="col-span-3 pl-16">Course</div>
 							<div className="col-span-3 pr-4">Name (credits)</div>
@@ -109,31 +135,18 @@ export default function List(props: Props) {
 									);
 								})
 							) : props.listData.length > 0 ? (
-								props.listData.map((item) => {
-									return (
-										<ListRow
-											key={item.crn}
-											section={item}
-											term={currentTerm}
-											isSelected={
-												detailedSchedule?.sections.findIndex(
-													(o: SectionsBrowserType) =>
-														o.crn === item.crn
-												) !== -1
-											}
-											doesCollide={
-												item.is_active
-													? checkCollision(
-															item.schedule,
-															detailedSchedule
-													  )
-													: false
-											}
-											addToSchedule={addToSchedule}
-											removeFromSchedule={removeFromSchedule}
-										/>
-									);
-								})
+								<Virtuoso
+									style={{
+										height: isLargeScreenSize
+											? "calc(100% - 0rem)"
+											: "calc(100% - 3.25rem)",
+										overflowX: "hidden",
+									}}
+									totalCount={props.listData.length}
+									itemContent={(index) => {
+										return <Row index={index} />;
+									}}
+								/>
 							) : props.listData.length < 1 &&
 							  (props.isKFA || props.isTFA) ? (
 								<div className="grid items-center justify-center h-full py-24 dark:text-slate-300">

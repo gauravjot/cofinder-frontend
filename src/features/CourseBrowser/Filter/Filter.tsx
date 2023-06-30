@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useLocation } from "react-router-dom";
 import { SectionsBrowserType, InstructorType, SubjectType } from "@/types/dbTypes";
 import {
 	ReduxSectionDetailedType,
@@ -11,6 +10,7 @@ import { useFetchInstructors } from "@/services/core/fetch_instructors";
 import { useFetchSubjects } from "@/services/core/fetch_subjects";
 import { filterData } from "./algorithm";
 import CourseBrowserFilter from "@/components/ui/coursebrowser/CourseBrowserFilter";
+import KeywordFilter from "./KeywordFilter";
 
 interface Props {
 	setData: React.Dispatch<React.SetStateAction<SectionsBrowserType[]>>;
@@ -21,15 +21,10 @@ interface Props {
 }
 
 export default function Filter(props: Props) {
-	const location = useLocation();
 	// For expanding filter
 	const [expandFilters, setExpandFilters] = React.useState<boolean>(false);
 	let expandFiltersRef: React.RefObject<any> = React.useRef<HTMLDivElement>(null);
-	// filter keyword from input bar
-	const [keyword, setKeyword] = React.useState<string>(
-		location.state?.keyword ? location.state.keyword : ""
-	);
-	const deferredKeyword = React.useDeferredValue(keyword);
+	const [keyword, setKeyword] = React.useState<string>("");
 	// filter subjects and professors from expandable
 	// The contains choosen filters by user
 	const [selectedSubjects, setSelectedSubjects] = React.useState<SubjectType[]>([]);
@@ -67,19 +62,19 @@ export default function Filter(props: Props) {
 
 	// Apply Filters
 	React.useEffect(() => {
-		applyFilters(sectionsTermData.sections, deferredKeyword);
-	}, [sectionsTermData.sections, deferredKeyword]);
+		applyFilters(sectionsTermData.sections, keyword);
+	}, [sectionsTermData.sections, keyword]);
 
 	React.useEffect(() => {
 		if (selectedInstructors.length + selectedSubjects.length < 1) {
-			applyFilters(sectionsTermData.sections, deferredKeyword);
+			applyFilters(sectionsTermData.sections, keyword);
 		}
 	}, [selectedSubjects, selectedInstructors]);
 
 	// Set isKeywordFilterActive
 	React.useEffect(() => {
-		setIsKFA(deferredKeyword.length > 0);
-	}, [deferredKeyword]);
+		setIsKFA(keyword.length > 0);
+	}, [keyword]);
 
 	const applyFilters = React.useCallback(
 		(data: SectionsBrowserType[], keyword: string) => {
@@ -135,7 +130,7 @@ export default function Filter(props: Props) {
 
 	return (
 		<div className="sticky top-0 z-20 sm:h-16 bg-white dark:bg-slate-1000 border-b border-gray-300 dark:border-slate-800 py-px">
-			<div className="container mx-auto px-4">
+			<div className="container mx-auto px-4 relative">
 				<div className="sm:flex items-center transition-colors rounded-lg">
 					<div className="sm:flex-none flex justify-end md:justify-start items-center pr-4 py-3 lg:min-w-[19rem] pl-12 sm:pl-16 md:pl-16 lg:pl-20 xl:pl-0">
 						<button
@@ -168,50 +163,11 @@ export default function Filter(props: Props) {
 						</div>
 					</div>
 					<div className="sm:flex-1 flex justify-center items-center sm:justify-end xl:justify-center my-4 sm:mb-0 sm:my-0">
-						<div className="inline relative">
-							<input
-								type="text"
-								className={
-									"font-medium tw-input-focus border rounded-lg border-gray-300 dark:bg-slate-700" +
-									" dark:border-slate-900 dark:text-white py-2 px-10 pl-12 disabled:opacity-50" +
-									" shadow w-[calc(100vw-3rem)] sm:w-[18rem] md:w-[20rem] lg:w-[24rem] xl:w-[26rem] 2xl:w-[28rem]"
-								}
-								placeholder="Search keyword e.g. CIS"
-								value={keyword}
-								disabled={sectionsTermData.fetched < 0}
-								onChange={(e) => setKeyword(e.target.value)}
-							/>
-							<div className="absolute left-1.5 top-[0.35rem] tw-show-on-hover-parent">
-								<span className="material-icons text-xl w-8 h-8 hover:bg-accent-100 rounded-full text-center grid items-center dark:text-white dark:hover:bg-slate-900">
-									bolt
-								</span>
-								<div className="tw-show-on-hover text-gray-600 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-900">
-									<span className="block font-medium mb-1 text-gray-800 dark:text-white text-smb">
-										Advanced Filtering
-									</span>
-									Use comma separated values for multiple filters. For
-									example
-									<br />
-									<code className="block mt-1.5 ml-4 pb-1">
-										cis,comp,math
-									</code>
-								</div>
-							</div>
-							<div
-								className={
-									deferredKeyword === ""
-										? "hidden"
-										: "absolute right-[.325rem] top-[0.31rem]"
-								}
-							>
-								<button
-									className="material-icons text-gray-500 dark:text-white text-lg rounded-full w-8 h-8 hover:bg-gray-300 dark:hover:bg-slate-700 hover:text-gray-700"
-									onClick={() => setKeyword("")}
-								>
-									close
-								</button>
-							</div>
-						</div>
+						<KeywordFilter
+							fetchState={sectionsTermData.fetched}
+							keyword={keyword}
+							setKeyword={setKeyword}
+						/>
 					</div>
 					<div className="flex-none text-right lg:min-w-[19rem] hidden xl:block">
 						<h5 className="pl-4 font-semibold font-serif dark:text-white">
@@ -221,7 +177,7 @@ export default function Filter(props: Props) {
 				</div>
 				<div
 					id="filter-box"
-					className="accordion absolute left-2 right-3 md:right-auto md:left-auto tw-shadow bg-gray-50 dark:bg-slate-800 ml-2 rounded-lg px-6 py-6 pb-8 border border-gray-200 dark:border-slate-900 z-30"
+					className="accordion absolute top-14 sm:top-auto left-2 right-3 md:right-auto md:left-auto tw-shadow bg-gray-50 dark:bg-slate-800 ml-2 rounded-lg px-6 py-6 pb-8 border border-gray-200 dark:border-slate-900 z-30"
 					ref={expandFiltersRef}
 					aria-expanded="false"
 				>
@@ -274,7 +230,7 @@ export default function Filter(props: Props) {
 					<div>
 						<button
 							onClick={() => {
-								applyFilters(sectionsTermData.sections, deferredKeyword);
+								applyFilters(sectionsTermData.sections, keyword);
 								toggleFilters();
 							}}
 							className="tw-animation-scaleup-parent bg-accent-700 text-white text-left rounded-md px-3 py-1 font-medium mt-6 ml-1 tw-input-focus dark:hover:outline-transparent"

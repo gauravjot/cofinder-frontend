@@ -17,7 +17,7 @@ export default function CourseBrowserContent(props: ICourseBrowserContentProps) 
 	const [showOnlySelected, setShowOnlySelected] = React.useState<boolean>(false);
 
 	return (
-		<div className="p-4 py-8 container mx-auto min-h-screen">
+		<div className="p-4 py-8 container mx-auto h-[calc(100vh-12rem)] sm:h-[calc(100vh-8rem)] lg:h-[calc(100vh-8rem)]">
 			<div className="flex flex-wrap relative place-items-center mb-4">
 				<div className="flex-1">
 					<h3 className="font-medium font-serif dark:text-white">
@@ -55,7 +55,7 @@ export default function CourseBrowserContent(props: ICourseBrowserContentProps) 
 					)}
 				</div>
 			</div>
-			<div className="w-full">
+			<div className="w-full h-full overflow-y-hidden">
 				<List
 					mySchedule={mySchedule}
 					listData={props.data}
