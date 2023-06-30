@@ -1,38 +1,36 @@
 import { InstructorType, SectionsBrowserType, SubjectType } from "@/types/dbTypes";
-import { MyScheduleTypeItem } from "@/types/stateTypes";
 
 /**
  * @param inputData SectionsBrowserType[]
  * @param filterByKeyword string
  * @param filterBySubject SubjectType[]
  * @param filterByInstructor InstructorType[]
- * @param filterSchedule MyScheduleTypeItem[]
- * @description Filter priority: filter schedule, keyword, instructor, subject.
+ * @description Filter priority: filter keyword, instructor, subject.
  * @returns SectionsBrowserType[]
  */
 export function filterData(
 	inputData: SectionsBrowserType[],
 	filterByKeyword: string,
 	filterBySubject: SubjectType[],
-	filterByInstructor: InstructorType[],
-	filterSchedule: MyScheduleTypeItem[]
+	filterByInstructor: InstructorType[]
+	// filterSchedule?: MyScheduleTypeItem[]
 ): SectionsBrowserType[] {
 	// check if input data is empty
 	if (inputData.length < 1) return inputData;
 
 	// List of crns in schedule
-	let schedule_crns: number[] = [];
-	for (let sch = 0; sch < filterSchedule.length; sch++) {
-		schedule_crns.push(filterSchedule[sch].section);
-	}
+	// let schedule_crns: number[] = [];
+	// for (let sch = 0; sch < filterSchedule.length; sch++) {
+	// 	schedule_crns.push(filterSchedule[sch].section);
+	// }
 
-	let isFilterSchedule = schedule_crns.length > 0;
+	// let isFilterSchedule = schedule_crns.length > 0;
 
 	// Filtering over entire input data
 	let filtered_list = [...inputData].filter((section) => {
 		// We first check if filter schedule is the active
-		if (isFilterSchedule && schedule_crns.includes(section.crn)) return true;
-		if (isFilterSchedule) return false; // top priority so anything else is false
+		// if (isFilterSchedule && schedule_crns.includes(section.crn)) return true;
+		// if (isFilterSchedule) return false; // top priority so anything else is false
 
 		// Filter keyword
 		if (filterByKeyword.length > 0) return keywordFilter(section, filterByKeyword);

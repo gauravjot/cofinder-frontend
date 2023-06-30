@@ -46,12 +46,15 @@ function encodeB64(rows: MyScheduleTypeItem[]) {
 /*
  *
  */
-export function useFetchSpecificSections(): ReduxDetailedScheduleType {
+export function useFetchSchedule(
+	schedule_from_store?: MyScheduleTypeItem[]
+): ReduxDetailedScheduleType {
 	const [data, setData] = React.useState<ReduxDetailedScheduleType>({
 		fetched: 0,
 		sections: [],
 	});
-	const mySchedule: MyScheduleTypeItem[] = useAppSelector(selectAllSchedules);
+	const mySchedule: MyScheduleTypeItem[] =
+		schedule_from_store || useAppSelector(selectAllSchedules);
 	const reduxScheduleSections: ReduxDetailedScheduleType =
 		useAppSelector(selectAllTermSchedules);
 	const currentTerm: TermType = useAppSelector(selectCurrentTerm);

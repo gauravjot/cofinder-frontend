@@ -1,12 +1,12 @@
 import { MultiSelect } from "@/components/ui/common/MultiSelect";
 import Multiselect from "multiselect-react-dropdown";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, memo } from "react";
 
 export interface Props<T> {
 	data: T[];
 	preSelected?: T | undefined;
 	selected: T[];
-	setSelected: React.Dispatch<React.SetStateAction<T[]>>;
+	setSelected: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
 export function CourseBrowserFilter<T>(props: Props<T>) {
@@ -35,3 +35,5 @@ export function CourseBrowserFilter<T>(props: Props<T>) {
 		</>
 	);
 }
+
+export default memo(CourseBrowserFilter);

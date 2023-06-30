@@ -5,13 +5,12 @@ import {
 	ReduxSectionDetailedType,
 	ReduxInstructorType,
 	ReduxSubjectType,
-	MyScheduleTypeItem,
 } from "@/types/stateTypes";
 import { useFetchSections } from "@/services/core/fetch_sections";
 import { useFetchInstructors } from "@/services/core/fetch_instructors";
 import { useFetchSubjects } from "@/services/core/fetch_subjects";
-import { filterData } from "./filter_fn";
-import { CourseBrowserFilter } from "@/components/ui/coursebrowser/CourseBrowserFilter";
+import { filterData } from "./algorithm";
+import CourseBrowserFilter from "@/components/ui/coursebrowser/CourseBrowserFilter";
 
 interface Props {
 	setData: React.Dispatch<React.SetStateAction<SectionsBrowserType[]>>;
@@ -19,8 +18,6 @@ interface Props {
 	setIsKFA: React.Dispatch<React.SetStateAction<boolean>>;
 	setSubjectFilter?: string;
 	setKeywordFilter?: string;
-	showOnlySelected: boolean;
-	schedule: MyScheduleTypeItem[];
 }
 
 export default function Filter(props: Props) {
@@ -70,27 +67,12 @@ export default function Filter(props: Props) {
 
 	// Apply Filters
 	React.useEffect(() => {
-		applyFilters(
-			sectionsTermData.sections,
-			deferredKeyword,
-			props.showOnlySelected,
-			props.schedule
-		);
-	}, [
-		sectionsTermData.sections,
-		deferredKeyword,
-		props.showOnlySelected,
-		props.schedule,
-	]);
+		applyFilters(sectionsTermData.sections, deferredKeyword);
+	}, [sectionsTermData.sections, deferredKeyword]);
 
 	React.useEffect(() => {
 		if (selectedInstructors.length + selectedSubjects.length < 1) {
-			applyFilters(
-				sectionsTermData.sections,
-				deferredKeyword,
-				props.showOnlySelected,
-				props.schedule
-			);
+			applyFilters(sectionsTermData.sections, deferredKeyword);
 		}
 	}, [selectedSubjects, selectedInstructors]);
 
@@ -100,27 +82,15 @@ export default function Filter(props: Props) {
 	}, [deferredKeyword]);
 
 	const applyFilters = React.useCallback(
-		(
-			data: SectionsBrowserType[],
-			keyword: string,
-			showSelected: boolean,
-			schedule: MyScheduleTypeItem[]
-		) => {
+		(data: SectionsBrowserType[], keyword: string) => {
 			let isAnyFilterActive =
 				keyword.length > 0 ||
 				selectedSubjects.length > 0 ||
-				selectedInstructors.length > 0 ||
-				showSelected;
+				selectedInstructors.length > 0;
 			// If no filter is active then we set state to whole data
 			props.setData(
 				isAnyFilterActive
-					? filterData(
-							data,
-							keyword,
-							selectedSubjects,
-							selectedInstructors,
-							showSelected ? schedule : []
-					  )
+					? filterData(data, keyword, selectedSubjects, selectedInstructors)
 					: data
 			);
 			setActiveFilterCount(selectedSubjects.length + selectedInstructors.length);
@@ -304,12 +274,7 @@ export default function Filter(props: Props) {
 					<div>
 						<button
 							onClick={() => {
-								applyFilters(
-									sectionsTermData.sections,
-									deferredKeyword,
-									props.showOnlySelected,
-									props.schedule
-								);
+								applyFilters(sectionsTermData.sections, deferredKeyword);
 								toggleFilters();
 							}}
 							className="tw-animation-scaleup-parent bg-accent-700 text-white text-left rounded-md px-3 py-1 font-medium mt-6 ml-1 tw-input-focus dark:hover:outline-transparent"

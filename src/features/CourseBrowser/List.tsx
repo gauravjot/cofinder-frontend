@@ -6,7 +6,6 @@ import { checkCollision } from "@/utils/CheckTimeSlotCollision";
 import { SectionsBrowserType } from "@/types/dbTypes";
 import { FetchState } from "@/types/apiResponseType";
 import { API_FAIL_RETRY_TIMER } from "@/config";
-import { useFetchSpecificSections } from "@/services/core/fetch_specific_sections";
 import { selectCurrentTerm } from "@/redux/terms/currentTermSlice";
 import { selectAllSections } from "@/redux/sections/sectionSlice";
 import {
@@ -17,18 +16,22 @@ import {
 	add as addToTermSchedule,
 	remove as removeFromTermSchedule,
 } from "@/redux/schedules/termScheduleSlice";
+import { useFetchSchedule } from "@/services/core/fetch_schedule";
+import { MyScheduleTypeItem } from "@/types/stateTypes";
 
 const ListRow = React.lazy(() => import("@/features/CourseBrowser/ListRow"));
 
 interface Props {
+	mySchedule: MyScheduleTypeItem[];
 	listData: SectionsBrowserType[];
 	isKFA: boolean;
 	isTFA: boolean;
+	showOnlySelected: boolean;
 }
 
-export default function ListData(props: Props) {
+export default function List(props: Props) {
 	const dispatch = useAppDispatch();
-	const detailedSchedule = useFetchSpecificSections();
+	const detailedSchedule = useFetchSchedule(props.mySchedule);
 	const currentTerm = useAppSelector(selectCurrentTerm);
 	const fetchState = useAppSelector(selectAllSections).fetched;
 
@@ -91,7 +94,21 @@ export default function ListData(props: Props) {
 								</div>
 							}
 						>
-							{props.listData.length > 0 ? (
+							{props.showOnlySelected ? (
+								detailedSchedule.sections.map((item) => {
+									return (
+										<ListRow
+											key={item.crn}
+											section={item}
+											term={currentTerm}
+											isSelected={true}
+											doesCollide={false}
+											addToSchedule={addToSchedule}
+											removeFromSchedule={removeFromSchedule}
+										/>
+									);
+								})
+							) : props.listData.length > 0 ? (
 								props.listData.map((item) => {
 									return (
 										<ListRow
@@ -104,10 +121,14 @@ export default function ListData(props: Props) {
 														o.crn === item.crn
 												) !== -1
 											}
-											doesCollide={checkCollision(
-												item.schedule,
-												detailedSchedule
-											)}
+											doesCollide={
+												item.is_active
+													? checkCollision(
+															item.schedule,
+															detailedSchedule
+													  )
+													: false
+											}
 											addToSchedule={addToSchedule}
 											removeFromSchedule={removeFromSchedule}
 										/>
