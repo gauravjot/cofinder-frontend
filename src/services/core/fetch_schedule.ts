@@ -87,7 +87,10 @@ export function useFetchSchedule(
 				return row.term === currentTerm.id;
 			});
 			// If schedule is empty then we set an empty list
-			if (pickTermSchedule.length < 1) {
+			if (
+				new Date().getTime() - reduxScheduleSections.fetched > FETCH_TIME_GAP &&
+				pickTermSchedule.length < 1
+			) {
 				setData({
 					fetched: new Date().getTime(),
 					sections: [],
