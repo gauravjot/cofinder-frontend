@@ -31,7 +31,7 @@ export default function ShowSelectedToggle({
 				(showOnlySelected
 					? "bg-laccent-800 hover:bg-laccent-900 text-white "
 					: "bg-gray-900/5 dark:bg-white/5 hover:bg-black/10 hover:dark:bg-gray-400/20 ") +
-				"disabled:opacity-50 flex place-items-center py-2 px-5 rounded-full"
+				"disabled:opacity-50 flex place-items-center py-2 px-3 sm:px-5 rounded-full"
 			}
 			disabled={
 				mySchedule.filter((sch) => {

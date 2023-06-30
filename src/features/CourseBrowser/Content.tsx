@@ -17,10 +17,10 @@ export default function CourseBrowserContent(props: ICourseBrowserContentProps) 
 	const [showOnlySelected, setShowOnlySelected] = React.useState<boolean>(false);
 
 	return (
-		<div className="p-4 py-8 container mx-auto h-[calc(100vh-12rem)] sm:h-[calc(100vh-8rem)] lg:h-[calc(100vh-8rem)]">
+		<div className="p-4 py-6 md:py-8 container mx-auto h-[calc(100vh-12rem)] sm:h-[calc(100vh-8rem)] lg:h-[calc(100vh-8rem)]">
 			<div className="flex flex-wrap relative place-items-center mb-4">
 				<div className="flex-1">
-					<h3 className="font-medium font-serif dark:text-white">
+					<h3 className="font-medium text-xl font-serif dark:text-white">
 						Course Browser
 					</h3>
 					<div className="flex gap-4 place-items-center my-1">

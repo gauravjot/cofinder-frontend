@@ -162,7 +162,7 @@ export default function Filter(props: Props) {
 								: "ACTIVE: " + activeFilterCount}
 						</div>
 					</div>
-					<div className="sm:flex-1 flex justify-center items-center sm:justify-end xl:justify-center my-4 sm:mb-0 sm:my-0">
+					<div className="sm:flex-1 flex justify-center items-center sm:justify-end xl:justify-center mb-2 sm:mb-0">
 						<KeywordFilter
 							fetchState={sectionsTermData.fetched}
 							keyword={keyword}
@@ -234,10 +234,6 @@ export default function Filter(props: Props) {
 								toggleFilters();
 							}}
 							className="tw-animation-scaleup-parent bg-accent-700 text-white text-left rounded-md px-3 py-1 font-medium mt-6 ml-1 tw-input-focus dark:hover:outline-transparent"
-							// disabled={
-							// 	subjsOnChange.length === 0 &&
-							// 	profsOnChange.length === 0
-							// }
 						>
 							<span className="tw-animation-scaleup material-icons text-xl align-middle">
 								check

@@ -1,6 +1,6 @@
 {
 	"name": "cofinder",
-	"version": "0.2.0a",
+	"version": "0.2.0",
 	"private": true,
 	"main": "src/index.tsx",
 	"dependencies": {
