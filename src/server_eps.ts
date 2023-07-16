@@ -63,3 +63,12 @@ export const startSessionEP = (sut: string): string => {
 		) || ""
 	);
 };
+
+export const saveScheduleEP = (term_id: string): string => {
+	return (
+		import.meta.env.VITE_SAVE_SCHEDULE.replace(
+			import.meta.env.VITE_INSERTION_IDENTIFIER || "{}",
+			term_id
+		) || ""
+	);
+};

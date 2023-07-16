@@ -9,6 +9,7 @@ import ThemeToggle from "@/components/utils/ThemeToggle";
 import { ROUTE } from "@/routes";
 import { FEEDBACK_URL } from "@/config";
 import UserDataIE from "./UserDataIE";
+import { User } from "./User";
 
 interface Props {
 	current?: string;
@@ -78,7 +79,9 @@ export default function Sidebar(props: Props) {
 						<ThemeToggle />
 					</div>
 				</div>
-				<div className="xl:mt-8 mb-4">{/* <User /> */}</div>
+				<div className="xl:mt-8 mb-4">
+					<User />
+				</div>
 				<div className="my-3">
 					<ErrorBoundary fallback={<></>}>
 						<TermSelector />

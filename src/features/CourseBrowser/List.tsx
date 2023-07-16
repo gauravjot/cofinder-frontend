@@ -20,6 +20,7 @@ import { useFetchSchedule } from "@/services/core/fetch_schedule";
 import { MyScheduleTypeItem } from "@/types/stateTypes";
 import { Virtuoso } from "react-virtuoso";
 import { useLgMediaQuery } from "@/hooks/useMediaQuery";
+import { selectUser } from "../../redux/users/userSlice";
 
 const ListRow = React.lazy(() => import("@/features/CourseBrowser/ListRow"));
 
@@ -35,6 +36,7 @@ export default function List(props: Props) {
 	const dispatch = useAppDispatch();
 	const detailedSchedule = useFetchSchedule(props.mySchedule);
 	const currentTerm = useAppSelector(selectCurrentTerm);
+	const userToken = useAppSelector(selectUser)?.token;
 	const fetchState = useAppSelector(selectAllSections).fetched;
 
 	const isLargeScreenSize = useLgMediaQuery();
@@ -45,6 +47,7 @@ export default function List(props: Props) {
 				{
 					term: currentTerm.id,
 					section: section.crn,
+					userToken: userToken,
 				},
 			])
 		);
