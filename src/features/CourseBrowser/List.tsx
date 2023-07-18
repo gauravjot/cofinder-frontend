@@ -56,7 +56,15 @@ export default function List(props: Props) {
 
 	const removeFromSchedule = (section: SectionsBrowserType) => {
 		dispatch(removeFromTermSchedule(section.crn));
-		dispatch(removeFromMySchedule(section.crn));
+		dispatch(
+			removeFromMySchedule([
+				{
+					term: currentTerm.id,
+					section: section.crn,
+					userToken: userToken,
+				},
+			])
+		);
 	};
 
 	const Row = ({ index }: { index: number }) => {

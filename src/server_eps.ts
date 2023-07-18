@@ -72,3 +72,5 @@ export const saveScheduleEP = (term_id: string): string => {
 		) || ""
 	);
 };
+
+export const EP_USER_INFO: string = import.meta.env.VITE_USER_INFO || "";
