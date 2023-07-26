@@ -31,6 +31,16 @@
 	filter: invert(1);
 }
 
+.ic-color-warning-200 {
+	filter: invert(99%) sepia(73%) saturate(788%) hue-rotate(315deg) brightness(103%)
+		contrast(95%);
+}
+
+.ic-color-warning-700 {
+	filter: invert(42%) sepia(87%) saturate(3028%) hue-rotate(25deg) brightness(94%)
+		contrast(101%);
+}
+
 .ic-md {
 	height: 1.25rem;
 	width: 1.25rem;
@@ -39,6 +49,16 @@
 .ic-lg {
 	height: 1.75rem;
 	width: 1.75rem;
+}
+
+.ic-xl {
+	height: 2rem;
+	width: 2rem;
+}
+
+.ic-2xl {
+	height: 2.5rem;
+	width: 2.5rem;
 }
 
 .ic-open-in-new {
@@ -98,5 +118,10 @@
 
 .ic-north {
 	background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgOTYgOTYwIDk2MCIgd2lkdGg9IjQ4Ij48cGF0aCBkPSJNNDQwLjM5MSA5ODUuNjA5VjMxMi42MUwyNDEuNDM1IDUxMi42OTZsLTU1LjU2Ni01Ni4xMzFMNDgwIDE2Mi40MzRsMjk0LjY5NiAyOTQuMTMxLTU1LjU2NiA1NS41NjZMNTE5LjYwOSAzMTIuNjF2NjcyLjk5OWgtNzkuMjE4WiIvPjwvc3ZnPg==);
+	background-size: contain;
+}
+
+.ic-warning-circle {
+	background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgLTk2MCA5NjAgOTYwIiB3aWR0aD0iNDgiPjxwYXRoIGQ9Ik00NzkuOTgyLTI4MHExNC4wMTggMCAyMy41MTgtOS40ODIgOS41LTkuNDgzIDkuNS0yMy41IDAtMTQuMDE4LTkuNDgyLTIzLjUxOC05LjQ4My05LjUtMjMuNS05LjUtMTQuMDE4IDAtMjMuNTE4IDkuNDgyLTkuNSA5LjQ4My05LjUgMjMuNSAwIDE0LjAxOCA5LjQ4MiAyMy41MTggOS40ODMgOS41IDIzLjUgOS41Wk00NTMtNDMzaDYwdi0yNTNoLTYwdjI1M1ptMjcuMjY2IDM1M3EtODIuNzM0IDAtMTU1LjUtMzEuNXQtMTI3LjI2Ni04NnEtNTQuNS01NC41LTg2LTEyNy4zNDFRODAtMzk3LjY4MSA4MC00ODAuNXEwLTgyLjgxOSAzMS41LTE1NS42NTlRMTQzLTcwOSAxOTcuNS03NjN0MTI3LjM0MS04NS41UTM5Ny42ODEtODgwIDQ4MC41LTg4MHE4Mi44MTkgMCAxNTUuNjU5IDMxLjVRNzA5LTgxNyA3NjMtNzYzdDg1LjUgMTI3UTg4MC01NjMgODgwLTQ4MC4yNjZxMCA4Mi43MzQtMzEuNSAxNTUuNVQ3NjMtMTk3LjY4NHEtNTQgNTQuMzE2LTEyNyA4NlE1NjMtODAgNDgwLjI2Ni04MFptLjIzNC02MFE2MjItMTQwIDcyMS0yMzkuNXQ5OS0yNDFRODIwLTYyMiA3MjEuMTg4LTcyMSA2MjIuMzc1LTgyMCA0ODAtODIwcS0xNDEgMC0yNDAuNSA5OC44MTJRMTQwLTYyMi4zNzUgMTQwLTQ4MHEwIDE0MSA5OS41IDI0MC41dDI0MSA5OS41Wm0tLjUtMzQwWiIvPjwvc3ZnPg==);
 	background-size: contain;
 }

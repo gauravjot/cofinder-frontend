@@ -7,20 +7,26 @@ import React from "react";
 import { useStartSession } from "@/services/auth/start_session";
 import { queryFetchUserInfo } from "@/services/user/fetch_info";
 import { ROUTE } from "@/routes";
-import { useAppSelector } from "@/redux/hooks";
-import { selectAllSchedules } from "@/redux/schedules/scheduleSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { selectAllSchedules, set as setSchedule } from "@/redux/schedules/scheduleSlice";
 import { isEqual } from "lodash";
 import { selectAllTerms } from "@/redux/terms/termSlice";
+import { MyScheduleTypeItem } from "../../../types/stateTypes";
 
 export default function StartSessionPage() {
+	themeApply();
 	const navigate = useNavigate();
+	const dispatch = useAppDispatch();
 	const [scheduleDiff, setScheduleDiff] = React.useState<boolean>(false);
 	const [localSchedule, setLocalSchedule] = React.useState<{
 		[key: string]: string[];
 	}>();
+	const [selectSchToKeep, setSelectSchToKeep] = React.useState<"local" | "cloud">(
+		"cloud"
+	);
 	let token = useParams().token || "";
 	let startSession = useStartSession(token);
-	let userInfo = queryFetchUserInfo(startSession.token);
+	let userInfo = queryFetchUserInfo(startSession.token || "");
 	const scheduleLocal = useAppSelector(selectAllSchedules);
 	const terms = useAppSelector(selectAllTerms);
 
@@ -40,21 +46,35 @@ export default function StartSessionPage() {
 			let isSchDifferent = !isEqual(JSON.parse(userInfo.data.schedule), dict);
 			setScheduleDiff(isSchDifferent);
 			setLocalSchedule(dict);
-
+			console.log(scheduleLocal);
 			if (!isSchDifferent) {
-				const timer = setTimeout(() => {
+				setTimeout(() => {
 					navigate(ROUTE.Home);
 				}, 1250);
-				return () => clearTimeout(timer);
 			}
 		}
-	}, [userInfo, scheduleLocal]);
+	}, [userInfo.isSuccess, userInfo.data, scheduleLocal]);
 
 	function getTermFromID(term_id: string) {
 		return terms.terms.filter((t) => t.id === term_id)[0];
 	}
 
-	themeApply();
+	function saveSchedule() {
+		if (selectSchToKeep === "cloud" && userInfo.data) {
+			let sch: MyScheduleTypeItem[] = [];
+			let data = JSON.parse(userInfo.data.schedule);
+			for (let i = 0; i < Object.keys(data).length; i++) {
+				for (let j = 0; j < data[Object.keys(data)[i]].length; j++) {
+					sch.push({
+						section: data[Object.keys(data)[i]][j],
+						term: Object.keys(data)[i],
+					});
+				}
+			}
+			dispatch(setSchedule(sch));
+			navigate(ROUTE.Home);
+		}
+	}
 
 	return (
 		<>
@@ -85,76 +105,213 @@ export default function StartSessionPage() {
 				</div>
 				{scheduleDiff && (
 					<div className="absolute h-screen w-screen flex place-content-center place-items-center">
-						<div className="w-[36rem] max-w-[96%] h-max ml-auto mr-auto dark:bg-slate-800 bg-white rounded-md shadow-xl px-8 py-6 relative z-20">
-							<h3 className="mt-6 mb-4 font-black">
-								Schedule Changes Detected
-							</h3>
-							<p className="dark:text-slate-400">
-								There seems to be some difference between schedule saved
-								in your account and the schedule you made earlier.
-							</p>
-							<p className="dark:text-slate-400 mt-3">
-								Choose which one to keep.
-							</p>
-							<div className="grid grid-cols-2">
-								<button>Keep Local</button>
-								<button>Keep Cloud</button>
-							</div>
-							<div className="grid grid-cols-2">
-								<div className="col-span-1">
-									<h6 className="mb-4 mt-6 font-bold text-lg">Local</h6>
-									{localSchedule &&
-										Object.keys(localSchedule).map((term_id) => {
-											return (
-												<div>
-													<div className="mt-4 mr-2 border-b text-sm">
-														{getTermFromID(term_id).name}
-													</div>
-													<ul className="ml-4 mt-1 font-mono">
-														{localSchedule[term_id].map(
-															(section) => {
-																return (
-																	<li className="py-0.5">
-																		{section}
-																	</li>
-																);
-															}
-														)}
-													</ul>
-												</div>
-											);
-										})}
+						<div className="w-[36rem] max-w-[96%] h-max ml-auto mr-auto dark:bg-slate-800 bg-white rounded-md card-shadow relative z-20">
+							<div className="px-8 py-6">
+								<div className="mt-3 mb-5 flex place-items-center">
+									<div className="bg-orange-200 dark:bg-orange-100/80 p-2 mr-4 leading-[0] rounded-full">
+										<span className="ic-xl ic-warning-circle ic-color-warning-700 inline-block"></span>
+									</div>
+									<h3 className="font-black inline-block">
+										Multiple schedules detected
+									</h3>
 								</div>
-								<div className="col-span-1">
-									<h6 className="mb-4 mt-6 font-bold text-lg">Cloud</h6>
-									{userInfo.isSuccess && userInfo.data !== null ? (
-										Object.keys(
-											JSON.parse(userInfo.data.schedule)
-										).map((term_id) => {
-											return (
-												<div>
-													<div className="mt-4 mr-2 border-b text-sm">
-														{getTermFromID(term_id).name}
+								<p className="dark:text-slate-400 text-slate-800 leading-6">
+									There seems to be some difference between schedule
+									saved in your account and the schedule you made
+									earlier.
+								</p>
+
+								{/* select start */}
+								<div>
+									<div>
+										<div
+											className={
+												(selectSchToKeep === "local"
+													? "bg-blue-100 border-sky-800/40 border-2 hover:border-sky-800/20 " +
+													  "dark:bg-slate-600 dark:border-blue-500/70 "
+													: "border border-gray-200 hover:border-gray-300 dark:border-slate-600 hover:dark:border-slate-500 ") +
+												"flex border border-gray-200 card-shadow rounded-lg" +
+												" py-3 px-5 mt-7 mb-4 cursor-pointer hover:border-gray-300"
+											}
+											onClick={() => setSelectSchToKeep("local")}
+										>
+											<div className="flex-1">
+												<h5 className="font-bold mb-0.5">
+													Local
+												</h5>
+												{localSchedule &&
+													selectSchToKeep === "cloud" && (
+														<p className="leading-6 text-slate-600 text-sm dark:text-slate-400">
+															Schedules saved for:{" "}
+															{Object.keys(
+																localSchedule
+															).map((term_id) => {
+																return (
+																	<span>
+																		{
+																			getTermFromID(
+																				term_id
+																			).name
+																		}
+																		,{" "}
+																	</span>
+																);
+															})}
+														</p>
+													)}
+												{localSchedule &&
+													selectSchToKeep === "local" && (
+														<div className="mt-2">
+															{Object.keys(
+																localSchedule
+															).map((term_id) => {
+																return (
+																	<div className="flex place-items-baseline border-b-2 border-black/5 dark:border-white/10 py-1">
+																		<div className="w-24 text-sm">
+																			{
+																				getTermFromID(
+																					term_id
+																				).name
+																			}
+																		</div>
+																		<p className="ml-4 mt-1 font-mono">
+																			{localSchedule[
+																				term_id
+																			].map(
+																				(
+																					section
+																				) => {
+																					return (
+																						<span className="px-1 inline-block">
+																							•{" "}
+																							{
+																								section
+																							}
+																						</span>
+																					);
+																				}
+																			)}
+																		</p>
+																	</div>
+																);
+															})}
+														</div>
+													)}
+											</div>
+											<div>
+												{selectSchToKeep === "local" ? (
+													<div className="leading-0 mt-4 mr-2 border-2 border-blue-300 dark:border-blue-400 bg-blue-200 dark:bg-blue-400/30 p-2 rounded-full hover:border-blue-400">
+														<span className="ic ic-md ic-done block dark:invert"></span>
 													</div>
-													<ul className="ml-4 mt-1 font-mono">
-														{JSON.parse(
-															userInfo.data?.schedule
-														)[term_id].map((section: any) => {
+												) : (
+													<div className="w-5 h-5 border-2 border-gray-300 rounded-full mt-4 mr-5 hover:border-accent-600"></div>
+												)}
+											</div>
+										</div>
+									</div>
+
+									<div
+										className={
+											(selectSchToKeep === "cloud"
+												? "bg-blue-100 border-sky-800/40 border-2 hover:border-sky-800/20 " +
+												  "dark:bg-slate-600 dark:border-blue-500/70 "
+												: "border border-gray-200 hover:border-gray-300 dark:border-slate-600 hover:dark:border-slate-500 ") +
+											"flex border border-gray-200 card-shadow rounded-lg" +
+											" py-3 px-5 mt-7 mb-4 cursor-pointer hover:border-gray-300"
+										}
+										onClick={() => setSelectSchToKeep("cloud")}
+									>
+										<div className="flex-1 pr-2">
+											<h5 className="font-bold mb-0.5">Cloud</h5>
+											{selectSchToKeep === "local" &&
+												userInfo.isSuccess &&
+												userInfo.data !== null && (
+													<p className="leading-6 text-slate-600 text-sm dark:text-slate-400">
+														Schedules saved for:{" "}
+														{Object.keys(
+															JSON.parse(
+																userInfo.data.schedule
+															)
+														).map((term_id) => {
 															return (
-																<li className="py-0.5">
-																	{section}
-																</li>
+																<span>
+																	{
+																		getTermFromID(
+																			term_id
+																		).name
+																	}
+																	,{" "}
+																</span>
 															);
 														})}
-													</ul>
+													</p>
+												)}
+											{selectSchToKeep === "cloud" &&
+											userInfo.isSuccess &&
+											userInfo.data !== null ? (
+												<div className="mt-2">
+													{Object.keys(
+														JSON.parse(userInfo.data.schedule)
+													).map((term_id) => {
+														return (
+															<div className="flex place-items-baseline border-b-2 border-black/5 dark:border-white/10 py-1">
+																<div className="w-24 text-sm">
+																	{
+																		getTermFromID(
+																			term_id
+																		).name
+																	}
+																</div>
+																<p className="ml-4 mt-1 font-mono">
+																	{JSON.parse(
+																		userInfo.data
+																			?.schedule
+																	)[term_id].map(
+																		(
+																			section: any
+																		) => {
+																			return (
+																				<span className="px-1 inline-block">
+																					•{" "}
+																					{
+																						section
+																					}
+																				</span>
+																			);
+																		}
+																	)}
+																</p>
+															</div>
+														);
+													})}
 												</div>
-											);
-										})
-									) : (
-										<></>
-									)}
+											) : (
+												<></>
+											)}
+										</div>
+										<div>
+											{selectSchToKeep === "cloud" ? (
+												<div className="leading-0 mt-4 mr-2 border-2 border-blue-300 dark:border-blue-400 bg-blue-200 dark:bg-blue-400/30 p-2 rounded-full hover:border-blue-400">
+													<span className="ic ic-md ic-done block dark:invert"></span>
+												</div>
+											) : (
+												<div className="w-5 h-5 border-2 border-gray-300 rounded-full mt-4 mr-5 hover:border-accent-600"></div>
+											)}
+										</div>
+									</div>
 								</div>
+								{/* select ends */}
 							</div>
+							<button
+								className={
+									"bg-accent-700 hover:bg-accent-800 w-full " +
+									"text-white tracking-widest font-semibold text-center " +
+									"py-4 rounded-b-md"
+								}
+								onClick={saveSchedule}
+							>
+								PROCEED
+							</button>
 						</div>
 					</div>
 				)}
