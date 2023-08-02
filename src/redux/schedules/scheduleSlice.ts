@@ -30,7 +30,7 @@ export const scheduleSlice = createSlice({
 		},
 		remove: (state, action) => {
 			let schedule = state.filter((entry) => {
-				return entry.section !== action.payload[0].section;
+				return entry.section.toString() !== action.payload[0].section.toString();
 			});
 			let schedulesInTerm = schedule.filter(
 				(s) => s.term === action.payload[0].term

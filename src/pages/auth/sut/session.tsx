@@ -12,6 +12,7 @@ import { selectAllSchedules, set as setSchedule } from "@/redux/schedules/schedu
 import { isEqual } from "lodash";
 import { selectAllTerms } from "@/redux/terms/termSlice";
 import { MyScheduleTypeItem } from "../../../types/stateTypes";
+import alterBulkSchedule from "@/services/user/section/alter_bulk_schedule";
 
 export default function StartSessionPage() {
 	themeApply();
@@ -46,7 +47,6 @@ export default function StartSessionPage() {
 			let isSchDifferent = !isEqual(JSON.parse(userInfo.data.schedule), dict);
 			setScheduleDiff(isSchDifferent);
 			setLocalSchedule(dict);
-			console.log(scheduleLocal);
 			if (!isSchDifferent) {
 				setTimeout(() => {
 					navigate(ROUTE.Home);
@@ -73,8 +73,22 @@ export default function StartSessionPage() {
 			}
 			dispatch(setSchedule(sch));
 			navigate(ROUTE.Home);
+		} else if (selectSchToKeep === "local" && userInfo.data) {
+			// Send schedule to server
+			alterBulkSchedule(scheduleLocal, startSession.token).then(() => {
+				navigate(ROUTE.Home);
+			});
 		}
 	}
+
+	// If schedule difference is detected due to local schedule being empty
+	React.useEffect(() => {
+		if (scheduleDiff) {
+			if (scheduleLocal.length < 1) {
+				saveSchedule();
+			}
+		}
+	}, [scheduleDiff]);
 
 	return (
 		<>
@@ -162,39 +176,44 @@ export default function StartSessionPage() {
 												{localSchedule &&
 													selectSchToKeep === "local" && (
 														<div className="mt-2">
-															{Object.keys(
-																localSchedule
-															).map((term_id) => {
-																return (
-																	<div className="flex place-items-baseline border-b-2 border-black/5 dark:border-white/10 py-1">
-																		<div className="w-24 text-sm">
-																			{
-																				getTermFromID(
-																					term_id
-																				).name
-																			}
-																		</div>
-																		<p className="ml-4 mt-1 font-mono">
-																			{localSchedule[
-																				term_id
-																			].map(
-																				(
-																					section
-																				) => {
-																					return (
-																						<span className="px-1 inline-block">
-																							•{" "}
-																							{
-																								section
-																							}
-																						</span>
-																					);
-																				}
-																			)}
-																		</p>
-																	</div>
-																);
-															})}
+															<table>
+																<tbody>
+																	{Object.keys(
+																		localSchedule
+																	).map((term_id) => {
+																		return (
+																			<tr className="place-items-baseline border-b-2 border-black/5 dark:border-white/10">
+																				<td className="w-28 text-sm align-baseline py-1.5 pt-2">
+																					{
+																						getTermFromID(
+																							term_id
+																						)
+																							.name
+																					}
+																				</td>
+																				<td className="ml-4 mt-1 font-mono py-1.5">
+																					{localSchedule[
+																						term_id
+																					].map(
+																						(
+																							section
+																						) => {
+																							return (
+																								<span className="px-1 inline-block">
+																									•{" "}
+																									{
+																										section
+																									}
+																								</span>
+																							);
+																						}
+																					)}
+																				</td>
+																			</tr>
+																		);
+																	})}
+																</tbody>
+															</table>
 														</div>
 													)}
 											</div>
@@ -221,7 +240,7 @@ export default function StartSessionPage() {
 										}
 										onClick={() => setSelectSchToKeep("cloud")}
 									>
-										<div className="flex-1 pr-2">
+										<div className="flex-1">
 											<h5 className="font-bold mb-0.5">Cloud</h5>
 											{selectSchToKeep === "local" &&
 												userInfo.isSuccess &&
@@ -250,40 +269,49 @@ export default function StartSessionPage() {
 											userInfo.isSuccess &&
 											userInfo.data !== null ? (
 												<div className="mt-2">
-													{Object.keys(
-														JSON.parse(userInfo.data.schedule)
-													).map((term_id) => {
-														return (
-															<div className="flex place-items-baseline border-b-2 border-black/5 dark:border-white/10 py-1">
-																<div className="w-24 text-sm">
-																	{
-																		getTermFromID(
-																			term_id
-																		).name
-																	}
-																</div>
-																<p className="ml-4 mt-1 font-mono">
-																	{JSON.parse(
-																		userInfo.data
-																			?.schedule
-																	)[term_id].map(
-																		(
-																			section: any
-																		) => {
-																			return (
-																				<span className="px-1 inline-block">
-																					•{" "}
-																					{
-																						section
-																					}
-																				</span>
-																			);
-																		}
-																	)}
-																</p>
-															</div>
-														);
-													})}
+													<table>
+														<tbody>
+															{Object.keys(
+																JSON.parse(
+																	userInfo.data.schedule
+																)
+															).map((term_id) => {
+																return (
+																	<tr className="place-items-baseline border-b-2 border-black/5 dark:border-white/10">
+																		<td className="w-28 text-sm align-baseline py-1.5 pt-2">
+																			{
+																				getTermFromID(
+																					term_id
+																				).name
+																			}
+																		</td>
+																		<td className="ml-4 mt-1 font-mono py-1.5">
+																			{JSON.parse(
+																				userInfo
+																					.data
+																					?.schedule
+																			)[
+																				term_id
+																			].map(
+																				(
+																					section: any
+																				) => {
+																					return (
+																						<span className="px-1 inline-block">
+																							•{" "}
+																							{
+																								section
+																							}
+																						</span>
+																					);
+																				}
+																			)}
+																		</td>
+																	</tr>
+																);
+															})}
+														</tbody>
+													</table>
 												</div>
 											) : (
 												<></>

@@ -6,16 +6,18 @@ export default function alterSchedule(
 	schList: string[],
 	auth_token: string
 ) {
-	axios.post(
-		saveScheduleEP(term_id),
-		{
-			schedule: schList.join("--"),
-		},
-		{
-			headers: {
-				"Content-Type": "multipart/form-data",
-				Authorization: auth_token,
+	if (auth_token && auth_token.length > 0) {
+		axios.post(
+			saveScheduleEP(term_id),
+			{
+				schedule: schList.join("--"),
 			},
-		}
-	);
+			{
+				headers: {
+					"Content-Type": "multipart/form-data",
+					Authorization: auth_token,
+				},
+			}
+		);
+	}
 }
