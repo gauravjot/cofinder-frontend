@@ -66,6 +66,11 @@
 	width: 2.5rem;
 }
 
+.ic-3xl {
+	height: 3.25rem;
+	width: 3.25rem;
+}
+
 .ic-open-in-new {
 	background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iNDgiIHdpZHRoPSI0OCI+PHBhdGggZD0iTTkuNDUgNDMuMjVxLTEuOTUgMC0zLjMyNS0xLjM3NVE0Ljc1IDQwLjUgNC43NSAzOC41NVY5LjQ1cTAtMS45NSAxLjM3NS0zLjM1UTcuNSA0LjcgOS40NSA0LjdoMTMuNXY0Ljc1SDkuNDV2MjkuMWgyOS4xdi0xMy41aDQuNzV2MTMuNXEwIDEuOTUtMS40IDMuMzI1LTEuNCAxLjM3NS0zLjM1IDEuMzc1Wm0xMC44LTEyLjJMMTcgMjcuNzVsMTguMy0xOC4zaC05LjM1VjQuN0g0My4zdjE3LjM1aC00Ljc1di05LjNaIi8+PC9zdmc+);
 	background-size: contain;

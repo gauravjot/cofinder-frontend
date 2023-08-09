@@ -52,11 +52,9 @@ export default function MyCourses() {
 				<>
 					<div className="mt-4 px-4 text-center border-dashed border-4 bg-slate-100 dark:bg-slate-800 bg-opacity-40 border-slate-300 dark:border-slate-700 rounded-xl h-80 flex place-items-center justify-center">
 						<div>
-							<span className="material-icons text-gray-400 dark:text-slate-300 text-opacity-40 text-6xl font-bold">
-								category
-							</span>
+							<span className="ic-3xl ic-menu-shapes inline-block dark:invert"></span>
 							<p className="text-lg text-gray-900 dark:text-white font-medium mt-4">
-								You have no course added.
+								Let's get started!
 							</p>
 							<p className="text-[0.95rem] leading-6 text-gray-600 dark:text-slate-400 mt-2 lg:w-2/3 mx-auto">
 								Select a course and we will take care of the rest. Start
@@ -69,9 +67,7 @@ export default function MyCourses() {
 								}}
 								className="tw-animate-to-90-parent bg-accent-700 px-4 pr-4 py-1.5 align-top font-medium text-white rounded-lg shadow-lg hover:bg-accent-800"
 							>
-								<span className="tw-animate-to-90 material-icons align-middle text-white text-base">
-									add
-								</span>
+								<span className="tw-animate-to-90 ic ic-add inline-block dark:invert align-middle"></span>
 								<span className="align-middle ml-2 text-base font-medium">
 									Add Course
 								</span>
