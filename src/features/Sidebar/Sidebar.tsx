@@ -101,7 +101,7 @@ export default function Sidebar(props: Props) {
 						className="tw-sidebar-nav-btn tw-hover-no-underline text-black dark:text-white"
 						to={ROUTE.Home}
 					>
-						<span className="ic ic-md ic-menu-home dark:invert inline-block"></span>
+						<span className="ic-md ic-menu-home dark:invert inline-block"></span>
 						<span>Courses Home</span>
 					</Link>
 					<Link
@@ -113,7 +113,7 @@ export default function Sidebar(props: Props) {
 						className="tw-sidebar-nav-btn tw-hover-no-underline text-black dark:text-white"
 						to={ROUTE.Calendar}
 					>
-						<span className="ic ic-md ic-menu-calendar dark:invert inline-block"></span>
+						<span className="ic-md ic-menu-calendar dark:invert inline-block"></span>
 						<span>Calendar</span>
 					</Link>
 					<Link
@@ -125,7 +125,7 @@ export default function Sidebar(props: Props) {
 						className="tw-sidebar-nav-btn tw-hover-no-underline text-black dark:text-white"
 						to={ROUTE.CourseBrowser}
 					>
-						<span className="ic ic-md ic-menu-shapes dark:invert inline-block"></span>
+						<span className="ic-md ic-menu-shapes dark:invert inline-block"></span>
 						<span>Course Browser</span>
 					</Link>
 					<Link
@@ -135,7 +135,7 @@ export default function Sidebar(props: Props) {
 						className="tw-sidebar-nav-btn tw-hover-no-underline text-black dark:text-white"
 						to={ROUTE.About}
 					>
-						<span className="ic ic-md ic-menu-team dark:invert inline-block"></span>
+						<span className="ic-md ic-menu-team dark:invert inline-block"></span>
 						<span>Dev Team</span>
 					</Link>
 					<div className="mt-8 ml-2 text-base pb-2 text-gray-600 dark:text-slate-400">
@@ -154,7 +154,7 @@ export default function Sidebar(props: Props) {
 						target="_blank"
 						rel="noopener noreferrer"
 					>
-						<span className="material-icons text-red-600">bug_report</span>
+						<span className="ic-md ic-menu-bug dark:invert inline-block"></span>
 						<span>Report a Bug</span>
 					</Link>
 				</nav>

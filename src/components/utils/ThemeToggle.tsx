@@ -5,8 +5,8 @@ export default function ThemeToggle() {
 	return (
 		<div className="darkmode-toggle" onClick={theme.toggle}>
 			<button>
-				<span className="material-icons dm-moon-icon">dark_mode</span>
-				<span className="material-icons dm-sun-icon">light_mode</span>
+				<span className="ic-xs ic-menu-moon dark:invert dm-moon-icon"></span>
+				<span className="ic-xs ic-menu-sun dm-sun-icon"></span>
 			</button>
 		</div>
 	);

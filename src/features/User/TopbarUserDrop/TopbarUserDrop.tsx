@@ -36,9 +36,7 @@ export default function TopbarUserDrop(props: Props) {
 				aria-label="Logout"
 				className="hover:bg-slate-400/20 px-4 py-1.5 pb-[7px] rounded-tr-md rounded-br-md border-l dark:border-l-slate-700"
 			>
-				<span className="tw-animate-to-90 material-icons align-middle text-black dark:text-white text-base">
-					logout
-				</span>
+				<span className="ic-md ic-menu-logout dark:invert inline-block align-middle"></span>
 			</button>
 		</div>
 	);
