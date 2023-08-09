@@ -33,7 +33,8 @@ export function filterData(
 		// if (isFilterSchedule) return false; // top priority so anything else is false
 
 		// Filter keyword
-		if (filterByKeyword.length > 0) return keywordFilter(section, filterByKeyword);
+		if (filterByKeyword.split(",").length > 0)
+			return keywordFilter(section, filterByKeyword);
 
 		// Filter instructor
 		for (let i = 0; i < filterByInstructor.length; i++) {
@@ -55,22 +56,27 @@ export function filterData(
 }
 
 function keywordFilter(section: SectionsBrowserType, keyword: string): boolean {
-	return (
-		section.course.code.toLowerCase().includes(keyword) ||
-		section.course.name.toLowerCase().includes(keyword) ||
-		section.instructor.toLowerCase().includes(keyword) ||
-		section.subject_id.toLowerCase().includes(keyword) ||
-		section.subject.toLowerCase().includes(keyword) ||
-		section.crn.toString().includes(keyword) ||
-		(
-			section.subject_id.toLowerCase() +
-			" " +
-			section.course.code.toLowerCase()
-		).includes(keyword) ||
-		(section.subject_id.toLowerCase() + section.course.code.toLowerCase()).includes(
-			keyword
-		) ||
-		(keyword === "lab" && section.is_lab) ||
-		section.medium.toLowerCase().includes(keyword)
-	);
+	let keys = keyword.split(",");
+	let result = false;
+	for (let i = 0; i < keys.length; i++) {
+		result =
+			result ||
+			section.course.code.toLowerCase().includes(keys[i]) ||
+			section.course.name.toLowerCase().includes(keys[i]) ||
+			section.instructor.toLowerCase().includes(keys[i]) ||
+			section.subject_id.toLowerCase().includes(keys[i]) ||
+			section.subject.toLowerCase().includes(keys[i]) ||
+			section.crn.toString().includes(keys[i]) ||
+			(
+				section.subject_id.toLowerCase() +
+				" " +
+				section.course.code.toLowerCase()
+			).includes(keys[i]) ||
+			(
+				section.subject_id.toLowerCase() + section.course.code.toLowerCase()
+			).includes(keys[i]) ||
+			(keys[i] === "lab" && section.is_lab) ||
+			section.medium.toLowerCase().includes(keys[i]);
+	}
+	return result;
 }

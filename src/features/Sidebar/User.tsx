@@ -6,7 +6,7 @@ import { selectUser } from "@/redux/users/userSlice";
 export function User() {
 	const user = useAppSelector(selectUser);
 
-	return user ? (
+	return user && user.token ? (
 		<div className="flex flex-col px-4 w-full">
 			<div className="flex-1 font-medium pb-2 text-gray-600 dark:text-slate-400">
 				Welcome
