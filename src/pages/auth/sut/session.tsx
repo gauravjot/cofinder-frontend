@@ -141,8 +141,8 @@ export default function StartSessionPage() {
 										<div
 											className={
 												(selectSchToKeep === "local"
-													? "bg-blue-100 border-sky-800/40 border-2 hover:border-sky-800/20 " +
-													  "dark:bg-slate-600 dark:border-blue-500/70 "
+													? "bg-blue-100 border-royal-800/40 border-2 hover:border-royal-800/25 " +
+													  "dark:bg-slate-600/70 dark:border-royal-500/70 "
 													: "border border-gray-200 hover:border-gray-300 dark:border-slate-600 hover:dark:border-slate-500 ") +
 												"flex border border-gray-200 card-shadow rounded-lg" +
 												" py-3 px-5 mt-7 mb-4 cursor-pointer hover:border-gray-300"
@@ -219,11 +219,11 @@ export default function StartSessionPage() {
 											</div>
 											<div>
 												{selectSchToKeep === "local" ? (
-													<div className="leading-0 mt-4 mr-2 border-2 border-blue-300 dark:border-blue-400 bg-blue-200 dark:bg-blue-400/30 p-2 rounded-full hover:border-blue-400">
+													<div className="leading-0 mt-4 mr-2 border-2 border-royal-400/30 dark:border-royal-300/60 bg-royal-200 dark:bg-royal-400/20 p-2 rounded-full hover:border-royal-600/50 hover:dark:border-royal-200/90 hover:dark:bg-royal-500/20">
 														<span className="ic ic-md ic-done block dark:invert"></span>
 													</div>
 												) : (
-													<div className="w-5 h-5 border-2 border-gray-300 rounded-full mt-4 mr-5 hover:border-accent-600"></div>
+													<div className="w-5 h-5 border-2 border-gray-300 rounded-full mt-4 mr-5 hover:border-royal-600"></div>
 												)}
 											</div>
 										</div>
@@ -233,7 +233,7 @@ export default function StartSessionPage() {
 										className={
 											(selectSchToKeep === "cloud"
 												? "bg-blue-100 border-sky-800/40 border-2 hover:border-sky-800/20 " +
-												  "dark:bg-slate-600 dark:border-blue-500/70 "
+												  "dark:bg-slate-600/70 dark:border-blue-500/70 "
 												: "border border-gray-200 hover:border-gray-300 dark:border-slate-600 hover:dark:border-slate-500 ") +
 											"flex border border-gray-200 card-shadow rounded-lg" +
 											" py-3 px-5 mt-7 mb-4 cursor-pointer hover:border-gray-300"
@@ -319,11 +319,11 @@ export default function StartSessionPage() {
 										</div>
 										<div>
 											{selectSchToKeep === "cloud" ? (
-												<div className="leading-0 mt-4 mr-2 border-2 border-blue-300 dark:border-blue-400 bg-blue-200 dark:bg-blue-400/30 p-2 rounded-full hover:border-blue-400">
+												<div className="leading-0 mt-4 mr-2 border-2 border-royal-400/30 dark:border-royal-300/60 bg-royal-200 dark:bg-royal-400/20 p-2 rounded-full hover:border-royal-600/50 hover:dark:border-royal-200/90 hover:dark:bg-royal-500/20">
 													<span className="ic ic-md ic-done block dark:invert"></span>
 												</div>
 											) : (
-												<div className="w-5 h-5 border-2 border-gray-300 rounded-full mt-4 mr-5 hover:border-accent-600"></div>
+												<div className="w-5 h-5 border-2 border-gray-300 rounded-full mt-4 mr-5 hover:border-royal-600"></div>
 											)}
 										</div>
 									</div>

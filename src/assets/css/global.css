@@ -513,9 +513,12 @@ nav[aria-label="Main"] a[aria-current="page"] {
 /*
 * Mobile
 */
+.hamburger[aria-hidden="false"] span {
+	@apply z-30 relative;
+}
 .hamburger[aria-hidden="false"]:after {
 	content: "";
-	@apply inset-0 bg-black/20 absolute z-10 h-screen w-screen;
+	@apply inset-0 bg-black/20 fixed z-20 h-screen w-screen;
 }
 .tw-sidebar-menu[aria-expanded="false"] {
 	@apply hidden;

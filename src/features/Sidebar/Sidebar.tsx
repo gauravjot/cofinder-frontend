@@ -34,14 +34,17 @@ export default function Sidebar(props: Props) {
 						setExpand((val) => !val);
 					}}
 					aria-hidden={!expand}
-					className={
-						(expand
-							? "bg-accent-700 hover:bg-accent-600/90 text-white rounded-full "
-							: "bg-white hover:bg-gray-200 dark:bg-slate-1000 dark:hover:bg-slate-800 text-black dark:text-white rounded-md ") +
-						" hamburger flex-none h-[3rem] w-[3rem] m-2 text-center"
-					}
+					className="hamburger"
 				>
-					<span className="material-icons align-middle text-2xl">
+					<span
+						className={
+							(expand
+								? "bg-accent-700 hover:bg-accent-700/90 text-white rounded-full "
+								: "bg-white hover:bg-gray-200 dark:bg-slate-1000 dark:hover:bg-slate-800 text-black dark:text-white rounded-md ") +
+							"material-icons text-2xl h-[3rem] w-[3rem] m-2 text-center flex place-content-center place-items-center"
+						}
+						title={expand ? "Close" : "Menu"}
+					>
 						{expand ? "close" : "menu"}
 					</span>
 				</button>

@@ -127,7 +127,7 @@ export default function NewsFeed() {
 						href={NEWS_URL}
 						target="_blank"
 						rel="noreferrer"
-						className="tw-accent-light-button"
+						className="tw-accent-light-button hover:no-underline"
 					>
 						<span className="align-middle mr-2">
 							Visit {SCHOOL_SHORT_NAME} Blog
