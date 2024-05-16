@@ -1,3 +1,7 @@
+# Archived
+
+Please check <https://github.com/gauravjot/cofinder> for future updates.
+
 # CoFinder
 
 CoFinder helps you find course offerings for University of the Fraser Valley. We are not yet affiliated with any of UFV's department, but this tool was developed as part of a course project within UFV.
